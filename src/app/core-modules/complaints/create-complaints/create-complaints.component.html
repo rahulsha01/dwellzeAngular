@@ -1,0 +1,180 @@
+<div class="content-wrapper">
+	<div class="content">
+		<mat-card *ngIf="isForm">
+			<mat-card-content>
+				<form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" novalidate>
+					<div class="fields-container">
+						<div class="row">
+							<div class="col-md-6">
+								<mat-form-field>
+									<mat-label>On Behalf of</mat-label>
+									<input #name matInput type="text" formControlName="comp_pmid"
+										[matAutocomplete]="auto1" (change)="primaryMemChangeFn()">
+									<mat-autocomplete #auto1="matAutocomplete"
+										(optionSelected)="onSelectionNameChanged($event)"
+										[displayWith]="displayPrimaryMemberFn.bind(this)">
+										<mat-option *ngFor="let option of optionsPM" [value]="option.pm_id">
+											{{option.pm_firstname}}
+										</mat-option>
+									</mat-autocomplete>
+
+									<mat-error *ngIf="this.masterFormGroup.get('comp_pmid').invalid">Please Select Valid
+										Name From The List </mat-error>
+								</mat-form-field>
+							</div>
+							<div class="col-md-6">
+								<mat-form-field class="example-full-width">
+									<mat-label>Category</mat-label>
+									<input matInput type="text" formControlName="comp_cat" (blur)="onBlur($event)"
+										(change)="initiateByValueChangeFn()" [matAutocomplete]="auto">
+									<mat-autocomplete #auto="matAutocomplete"
+										(optionSelected)="onSelectionChanged($event)"
+										[displayWith]="displayUnitTypeFn.bind(this)">
+										<mat-option *ngFor="let option of options" [value]="option.lov_storevalue">
+											{{option.lov_displayvalue}}
+										</mat-option>
+									</mat-autocomplete>
+
+									<mat-error *ngIf="this.masterFormGroup.get('comp_cat').invalid">Please Select Valid
+										Category From The List</mat-error>
+								</mat-form-field>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<label class="labelStatus">Urgent</label>
+								<mat-radio-group formControlName="comp_isurgent" (change)="radioChange($event.value)">
+									<mat-radio-button class="radioPadding" value="Y"
+										[checked]="this.masterFormGroup.value.comp_isurgent=='Y'">
+										Yes
+									</mat-radio-button>
+									<mat-radio-button class="radioPadding" color="warn" value="N"
+										[checked]="this.masterFormGroup.value.comp_isurgent=='N'">No
+									</mat-radio-button>
+								</mat-radio-group>
+							</div>
+							<div class="col-md-6">
+								<label class="labelStatus">Status </label>
+								<mat-radio-group formControlName="comp_status" (change)="radioChange($event.value)">
+									<mat-radio-button class="radioPadding" value='O'
+										[checked]="this.masterFormGroup.value.comp_status=='O'">Open
+									</mat-radio-button>
+									<mat-radio-button class="radioPadding" color="warn" value="C"
+										[checked]="this.masterFormGroup.value.comp_status=='C'">Closed
+									</mat-radio-button>
+								</mat-radio-group>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<mat-form-field>
+									<!-- <mat-label>Title</mat-label> -->
+									<input matInput type="text" placeholder="Title" formControlName="comp_title"
+										autocomplete="off">
+									<mat-error *ngIf="this.masterFormGroup.get('comp_title').invalid">Please Give Title
+									</mat-error>
+								</mat-form-field>
+							</div>
+							<div class="col-md-6">
+								<mat-form-field>
+									<input matInput [matDatepicker]="picker1" (focus)="assignedDateModal()"
+										formControlName="comp_date" placeholder="Date">
+									<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+									<mat-datepicker #picker1></mat-datepicker>
+									<mat-error *ngIf="this.masterFormGroup.get('comp_date').invalid">Please Select Valid
+										Date</mat-error>
+								</mat-form-field>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<label class="labelStatus">Description</label>
+								<mat-form-field class="example-full-width">
+									<textarea matInput formControlName="comp_desc" required autocomplete="off"
+										placeholder="Write here"></textarea>
+									<mat-error *ngIf="this.masterFormGroup.get('comp_desc').invalid">Please write
+										Description</mat-error>
+								</mat-form-field>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<label class="labelStatus">Related to</label>
+								<mat-radio-group formControlName="comp_relatedto" (change)="radioChange($event.value)">
+									<mat-radio-button class="radioPadding" value="U"
+										[checked]="this.masterFormGroup.value.comp_relatedto=='U'">
+										Unit
+									</mat-radio-button>
+									<mat-radio-button class="radioPadding" color="warn" value="C"
+										[checked]="this.masterFormGroup.value.comp_relatedto=='C'">Common Amenities
+									</mat-radio-button>
+								</mat-radio-group>
+							</div>
+						</div>
+						<br />
+						<br />
+
+
+						<div class="row">
+							<div class="col-md-6">
+								<div>
+									<label class="labelStatus">Photo </label>
+									<br />
+									<!-- <img [src]="imgSrc" class="img-thumbnail" style="max-width:100px;max-height:60px" /> -->
+									<!-- <button type="button" class="btn-solid removeBtn" (click)="deleteImage()"> X</button> -->
+								</div>
+								<div class="image-placeholder">
+									<div class="new-image" *ngIf="!imageFiles.length"></div>
+									<div class="placeholder-wrapper">
+										<div class="col-sm-3 image-uploaded-wrapper"
+											*ngFor="let image of imageFiles; index as i">
+											<img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+											<span (click)="removeImage(i)" title="Remove image" *ngIf="image.fileSrc">
+												<mat-icon>highlight_off</mat-icon>
+											</span>
+										</div>
+									</div>
+
+									<input type="file" accept="image/*" (change)="imageUpload($event)" multiple>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="button-container">
+						<div class="button-left"></div>
+						<div class="button-right">
+							<button mat-raised-button class="btn-solid">
+								<mat-icon>save</mat-icon>
+								<span>Save</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" (click)="resetForm()">
+								<mat-icon>clear</mat-icon>
+								<span>Reset</span>
+							</button>
+						</div>
+					</div>
+					<!-- {{ this.masterFormGroup.value | json }} -->
+
+				</form>
+			</mat-card-content>
+		</mat-card>
+
+		<!-- <dwlz-datatable [configuration]="complainConf" [dataSource]="dataSourceFn" (selected)="emitSelected($event)" *ngIf="!isForm"></dwlz-datatable> -->
+
+		<div class="content-header">
+			<div class="content-header-buttons" *ngIf="!isForm">
+				<button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+					<mat-icon>add</mat-icon>
+					<span>Create</span>
+				</button>
+				<button mat-flat-button class="btn-solid" type="button" (click)="openFilterModal(filterDialog)">
+					<mat-icon>filter_list</mat-icon>
+					<span>Filter</span>
+				</button>
+			</div>
+		</div>
+	</div>

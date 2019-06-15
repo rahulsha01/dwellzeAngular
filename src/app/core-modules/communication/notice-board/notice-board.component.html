@@ -1,0 +1,370 @@
+<div class="content-wrapper">
+	<div class="content">
+
+		<mat-tab-group mat-align-tabs="left" (selectedTabChange)="switchTab($event)" *ngIf="tabgroup">
+			<mat-tab label="Open">
+				<ng-template matTabContent>
+					<div class="content">
+						<mat-card *ngIf="isForm">
+							<mat-card-content>
+								<form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit()">
+									<div class="container-fluid fields-container">
+										<div class="row">
+											<div class="col-md-6">
+												<mat-form-field appearance="standard">
+													<mat-label>Title</mat-label>
+													<input matInput formControlName="nb_title" autocomplete="off"
+														required>
+													<mat-error *ngIf="this.masterFormGroup.get('nb_title').invalid">
+														Please
+														Enter Valid </mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<mat-form-field appearance="standard">
+													<mat-label>Reference Number</mat-label>
+													<input matInput type="text" formControlName="nb_refno"
+														autocomplete="off" required>
+													<mat-error *ngIf="this.masterFormGroup.get('nb_refno').invalid">
+														Enter Valid Ref. Number eg-abcd1234 </mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-12">
+												<mat-form-field class="example-full-width">
+													<textarea matInput rows="4" placeholder="Description"
+														formControlName="nb_desc"></textarea>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<!-- <mat-form-field>
+										<mat-label>Drafted By</mat-label>
+										<input #name matInput type="text" formControlName="nb_draftedby"
+											(blur)="onBlur($event)" [matAutocomplete]="auto1"
+											(change)="primaryMemChangeFn()">
+										<mat-autocomplete #auto1="matAutocomplete"
+											(optionSelected)="onSelectionChanged($event)"
+											[displayWith]="displayPrimaryMemberFn.bind(this)">
+											<mat-option *ngFor="let option of optionsPM" [value]="option.pm_id">
+												{{option.pm_firstname}}
+											</mat-option>
+										</mat-autocomplete>
+	
+										<mat-error *ngIf="this.masterFormGroup.get('nb_draftedby').invalid">Please Select Valid
+											Name From The List </mat-error>
+									</mat-form-field> -->
+												<mat-form-field>
+													<mat-select placeholder="Drafted By" formControlName="nb_draftedby" [formControl]="draftedby"
+														required name="fieldName" ngDefaultControl>
+														<mat-option *ngFor="let option of optionsPM"
+															[value]="option.comm_pmid">
+															{{option.pm_firstname}}
+														</mat-option>
+													</mat-select>
+													<mat-error *ngIf="this.masterFormGroup.get('nb_draftedby').invalid">
+														Please Select
+														Valid
+														Name From The List </mat-error>
+												</mat-form-field>
+											</div>
+
+
+											<div class="col-md-6">
+												<mat-form-field>
+													<mat-select placeholder="Approved By"
+														(blur)="Checker($event)"
+														formControlName="nb_approvedby" required>
+														<mat-option *ngFor="let option of optionsPM"
+															[value]="option.comm_pmid">
+															{{option.pm_firstname}}
+														</mat-option>
+													</mat-select>
+													<mat-error
+														*ngIf="this.masterFormGroup.get('nb_approvedby').invalid">Please
+														Select
+														Valid
+														Name From The List </mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<mat-form-field class="example-full-width">
+													<input matInput [matDatepicker]="picker" (focus)="startDateModal()"
+														placeholder="Published Date"
+														(ngModelChange)="dateChecker($event)"
+														formControlName="nb_publishdate" autocomplete="off">
+													<mat-datepicker-toggle matSuffix [for]="picker">
+													</mat-datepicker-toggle>
+													<mat-datepicker #picker></mat-datepicker>
+
+													<mat-error
+														*ngIf="this.masterFormGroup.get('nb_publishdate').invalid">
+														Please
+														Select Valid Start Date
+													</mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<mat-form-field class="example-full-width">
+													<input matInput [matDatepicker]="picker1" (focus)="endDateModal()"
+														placeholder="Valid Till Date"
+														(ngModelChange)="endDateChecker($event)"
+														formControlName="nb_validtill" autocomplete="off">
+													<mat-datepicker-toggle matSuffix [for]="picker1">
+													</mat-datepicker-toggle>
+													<mat-datepicker #picker1></mat-datepicker>
+
+													<mat-error *ngIf="this.masterFormGroup.get('nb_validtill').invalid">
+														Please
+														Select Valid End Date
+													</mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<div>
+													<label class="labelStatus">Attachments </label><br />
+												</div>
+												<div class="image-placeholder">
+													<div class="new-image" *ngIf="!imageFiles.length"></div>
+													<div class="placeholder-wrapper">
+														<div class="col-sm-3 image-uploaded-wrapper"
+															*ngFor="let image of imageFiles; index as i">
+															<img width="100%" src="{{image.fileSrc}}" alt=""
+																*ngIf="image.fileSrc">
+															<span (click)="removeImage(i)" title="Remove image"
+																*ngIf="image.fileSrc">
+																<mat-icon>highlight_off</mat-icon>
+															</span>
+														</div>
+													</div>
+
+													<input type="file" accept="image/*" multiple="true"
+														(change)="imageUpload($event)">
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="button-container">
+										<div class="button-left"></div>
+										<div class="button-right">
+											<button mat-raised-button class="btn-solid">
+												<mat-icon>save</mat-icon><span>Save</span>
+											</button>
+											<button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit"
+												(click)="onDelete()">
+												<mat-icon>delete</mat-icon><span>Delete</span>
+											</button>
+											<button mat-flat-button class="btn-solid" type="button"
+												(click)="closeForm()">
+												<mat-icon>clear</mat-icon><span>Cancel</span>
+											</button>
+										</div>
+									</div>
+								</form>
+								<!-- {{ this.masterFormGroup.value | json }} -->
+							</mat-card-content>
+						</mat-card>
+
+						<dwlz-datatable [configuration]="noticeBoardConf" [dataSource]="dataSourceFn"
+							(selected)="emitOpenSelected($event)" *ngIf="!isForm" [newFormData]="metaDataAll">
+						</dwlz-datatable>
+
+						<div class="content-header">
+							<div class="content-header-buttons" *ngIf="!isForm">
+								<button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+									<mat-icon>add</mat-icon><span>Create</span>
+								</button>
+								<button mat-flat-button class="btn-solid" type="button" (click)="openFilterModal()">
+									<mat-icon>filter_list</mat-icon><span>Filter</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</mat-tab>
+			<mat-tab label="Expired">
+				<ng-template matTabContent>
+					<div class="content">
+						<mat-card *ngIf="isExpiredForm">
+							<mat-card-content>
+								<form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit()">
+									<div class="container-fluid fields-container">
+										<div class="row">
+											<div class="col-md-6">
+												<mat-form-field appearance="standard">
+													<mat-label>Title</mat-label>
+													<input matInput formControlName="nb_title" readonly
+														autocomplete="off" required>
+													<mat-error *ngIf="this.masterFormGroup.get('nb_title').invalid">
+														Please
+														Enter Valid </mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<mat-form-field appearance="standard">
+													<mat-label>Reference Number</mat-label>
+													<input matInput type="text" formControlName="nb_refno" readonly
+														autocomplete="off" required>
+													<mat-error *ngIf="this.masterFormGroup.get('nb_refno').invalid">
+														Enter Valid Ref. Number eg-qter-1235 </mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-12">
+												<mat-form-field class="example-full-width">
+													<textarea matInput rows="4" readonly placeholder="Description"
+														formControlName="nb_desc"></textarea>
+													<!-- <mat-error *ngIf="this.masterFormGroup.get('nb_desc').invalid">
+													Please
+													Enter Description</mat-error> -->
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<!-- <mat-form-field>
+												<mat-label>Drafted By</mat-label>
+												<input #name matInput type="text" formControlName="nb_draftedby"
+													(blur)="onBlur($event)" [matAutocomplete]="auto1"
+													(change)="primaryMemChangeFn()">
+												<mat-autocomplete #auto1="matAutocomplete"
+													(optionSelected)="onSelectionChanged($event)"
+													[displayWith]="displayPrimaryMemberFn.bind(this)">
+													<mat-option *ngFor="let option of optionsPM" [value]="option.pm_id">
+														{{option.pm_firstname}}
+													</mat-option>
+												</mat-autocomplete>
+			
+												<mat-error *ngIf="this.masterFormGroup.get('nb_draftedby').invalid">Please Select Valid
+													Name From The List </mat-error>
+											</mat-form-field> -->
+												<mat-form-field>
+													<mat-select placeholder="Drafted By" disabled
+														formControlName="nb_draftedby" required>
+														<mat-option *ngFor="let option of optionsPM"
+															[value]="option.comm_pmid">
+															{{option.pm_firstname}}
+														</mat-option>
+													</mat-select>
+													<mat-error *ngIf="this.masterFormGroup.get('nb_draftedby').invalid">
+														Please Select
+														Valid
+														Name From The List </mat-error>
+												</mat-form-field>
+											</div>
+
+
+											<div class="col-md-6">
+												<mat-form-field>
+													<mat-select placeholder="Approved By" disabled
+														formControlName="nb_approvedby" required>
+														<mat-option *ngFor="let option of optionsPM"
+															[value]="option.comm_pmid">
+															{{option.pm_firstname}}
+														</mat-option>
+													</mat-select>
+													<mat-error
+														*ngIf="this.masterFormGroup.get('nb_approvedby').invalid">Please
+														Select
+														Valid
+														Name From The List </mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<mat-form-field class="example-full-width">
+													<input matInput [matDatepicker]="picker" readonly disabled
+														(focus)="startDateModal()" placeholder="Published Date"
+														(ngModelChange)="dateChecker($event)"
+														formControlName="nb_publishdate" autocomplete="off">
+													<mat-datepicker-toggle matSuffix [for]="picker">
+													</mat-datepicker-toggle>
+													<mat-datepicker #picker></mat-datepicker>
+
+													<mat-error
+														*ngIf="this.masterFormGroup.get('nb_publishdate').invalid">
+														Please
+														Select Valid Start Date
+													</mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<mat-form-field class="example-full-width">
+													<input matInput [matDatepicker]="picker1" readonly disabled
+														(focus)="endDateModal()" placeholder="Valid Till Date"
+														(ngModelChange)="endDateChecker($event)"
+														formControlName="nb_validtill" autocomplete="off">
+													<mat-datepicker-toggle matSuffix [for]="picker1">
+													</mat-datepicker-toggle>
+													<mat-datepicker #picker1></mat-datepicker>
+
+													<mat-error *ngIf="this.masterFormGroup.get('nb_validtill').invalid">
+														Please
+														Select Valid End Date
+													</mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="col-md-6">
+												<div>
+													<label class="labelStatus">Attachments </label><br />
+												</div>
+												<div class="image-placeholder">
+													<div class="new-image" *ngIf="!imageFiles.length"></div>
+													<div class="placeholder-wrapper">
+														<div class="col-sm-3 image-uploaded-wrapper"
+															*ngFor="let image of imageFiles; index as i">
+															<img width="100%" src="{{image.fileSrc}}" alt=""
+																*ngIf="image.fileSrc">
+															<!-- <span (click)="removeImage(i)" title="Remove image"
+																*ngIf="image.fileSrc">
+																<mat-icon>highlight_off</mat-icon>
+															</span> -->
+														</div>
+													</div>
+
+													<input type="file" accept="image/*" multiple="true"
+														(change)="imageUpload($event)">
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="button-container">
+										<div class="button-left"></div>
+										<div class="button-right">
+											<!-- <button mat-raised-button class="btn-solid">
+												<mat-icon>save</mat-icon><span>Save</span>
+											</button> -->
+											<button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit"
+												(click)="onDelete()">
+												<mat-icon>delete</mat-icon><span>Delete</span>
+											</button>
+											<button mat-flat-button class="btn-solid" type="button"
+												(click)="closeForm()">
+												<mat-icon>clear</mat-icon><span>Cancel</span>
+											</button>
+										</div>
+
+										<!-- <input type="file" accept="image/*" multiple="true" (change)="imageUpload($event)"> -->
+									</div>
+								</form>
+							</mat-card-content>
+						</mat-card>
+						<dwlz-datatable [configuration]="noticeBoardConf" [dataSource]="dataSourceFn"
+							(selected)="emitExpiredSelected($event)" *ngIf="!isExpiredForm"
+							[newFormData]="metaDataExpired">
+						</dwlz-datatable>
+
+					</div>
+				</ng-template>
+			</mat-tab>
+		</mat-tab-group>

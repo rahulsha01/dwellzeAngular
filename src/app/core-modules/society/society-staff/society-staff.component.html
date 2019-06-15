@@ -1,0 +1,183 @@
+<div class="content-wrapper">
+	<div class="content">
+		<mat-card *ngIf="isForm">
+			<mat-card-content>
+				<form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit()" novalidate>
+					<div class="row">
+						<div class="col-md-6">
+							<mat-form-field appearance="standard">
+								<mat-label>Name</mat-label>
+								<input matInput formControlName="ss_name" InitCapital autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('ss_name').invalid">Please Enter Valid Name
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="col-md-6" style="padding-top: 12px;">
+							<mat-form-field>
+								<mat-label>Category</mat-label>
+								<input matInput type="text" formControlName="ss_staffcat" [matAutocomplete]="auto"
+									(change)="inpuStaffCatListener()">
+								<mat-error *ngIf="this.masterFormGroup.get('ss_staffcat').invalid">Please Enter Or
+									Select Category
+								</mat-error>
+								<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUnitTypeFn.bind(this)">
+									<mat-option *ngFor="let option of staffCategoryOptions"
+										[value]="option.lov_storevalue">
+										{{option.lov_displayvalue}}
+									</mat-option>
+									<mat-error></mat-error>
+								</mat-autocomplete>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<mat-form-field appearance="standard">
+								<mat-label>Address</mat-label>
+								<textarea matInput type="number" formControlName="ss_address"
+									autocomplete="off"></textarea>
+								<mat-error *ngIf="this.masterFormGroup.get('ss_address').invalid">Please Enter Valid
+									Address
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-3" style="top:14px">
+							<mat-form-field appearance="standard">
+								<mat-label>Mobile</mat-label>
+								<input matInput formControlName="ss_mobile" MobileNumber autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('ss_mobile').invalid">Please Enter Valid Name
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-3" style="top:14px">
+							<mat-form-field appearance="standard">
+								<mat-label>Employee Id</mat-label>
+								<input matInput formControlName="ss_empid" autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('ss_empid').invalid">Please Enter Valid Name
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-3">
+							<mat-form-field appearance="standard">
+								<mat-label>Shift Start Time</mat-label>
+								<input matInput type="time" formControlName="ss_starttime" autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('ss_starttime').invalid">Please Enter Or
+									Select Timings
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="col-md-3">
+							<mat-form-field appearance="standard">
+								<mat-label>Shift End Time</mat-label>
+								<input matInput type="time" formControlName="ss_endtime" (blur)="checkForTime()"
+									autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('ss_endtime').invalid">Please Enter Or Select
+									Timings
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+
+						<div class="col-md-6">
+							<mat-label>&nbsp;&nbsp;Working Days&nbsp;&nbsp; </mat-label>
+							<div style="padding-top:10px">
+								<!--Changes checkboxes  below label 08/05/2019-->
+								<div *ngFor="let option of week;" style="display:inline-block;padding-left:10px">
+									<mat-checkbox class="example-margin" [value]='option.day'
+										(change)="onChange($event)" [checked]="isSelected(option.day)">
+										{{option.day}}
+									</mat-checkbox>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-3">
+							<div>
+								<mat-label>&nbsp;&nbsp; Profile photos </mat-label>
+								<br />
+							</div>
+							<div class="image-placeholder">
+								<div class="new-image" *ngIf="!imageFiles.length"></div>
+								<div class="placeholder-wrapper">
+									<div class="col-sm-3 image-uploaded-wrapper"
+										*ngFor="let image of imageFiles; index as i">
+										<img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+										<span (click)="removeImage(i)" title="Remove image" *ngIf="image.fileSrc">
+											<mat-icon>highlight_off</mat-icon>
+										</span>
+									</div>
+								</div>
+
+								<input type="file" accept="image/*" (change)="imageUpload($event)">
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div>
+								<mat-label>&nbsp;&nbsp; KYC docs </mat-label>
+								<br />
+							</div>
+							<div class="image-placeholder">
+								<div class="new-image" *ngIf="!docsFiles.length"></div>
+								<div class="placeholder-wrapper">
+									<div class="col-sm-3 image-uploaded-wrapper"
+										*ngFor="let image of docsFiles; index as i">
+										<img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+										<span (click)="removeDocument(i)" title="Remove image" *ngIf="image.fileSrc">
+											<mat-icon>highlight_off</mat-icon>
+										</span>
+									</div>
+								</div>
+
+								<input type="file" accept="image/*" (change)="docsUpload($event)">
+							</div>
+						</div>
+					</div>
+
+
+					<div class="button-container">
+						<div class="button-left"></div>
+						<div class="button-right">
+							<button mat-raised-button class="btn-solid">
+								<mat-icon>save</mat-icon>
+								<span>Save</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+								<mat-icon>delete</mat-icon>
+								<span>Delete</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+								<mat-icon>clear</mat-icon>
+								<span>Cancel</span>
+							</button>
+						</div>
+					</div>
+					<!-- {{masterFormGroup.value | json}} -->
+				</form>
+			</mat-card-content>
+		</mat-card>
+
+		<dwlz-datatable [configuration]="societyStaffConf" [dataSource]="dataSourceFn" (selected)="emitSelected($event)"
+			*ngIf="!isForm"></dwlz-datatable>
+
+		<div class="content-header">
+			<div class="content-header-buttons" *ngIf="!isForm">
+				<button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+					<mat-icon>add</mat-icon>
+					<span>Create</span>
+				</button>
+				<button mat-flat-button class="btn-solid" type="button" (click)="openFilterModal(filterDialog)">
+					<mat-icon>filter_list</mat-icon>
+					<span>Filter</span>
+				</button>
+			</div>
+		</div>
+	</div>

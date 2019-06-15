@@ -1,0 +1,250 @@
+<div class="content-wrapper">
+    <div class="content">
+        <mat-card *ngIf="isForm">
+            <mat-card-content>
+                <form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit()">
+                    <div class="fields-container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Category</mat-label>
+                                    <input matInput type="text" formControlName="comp_cat"
+                                        (change)="initiateByValueChangeFn()" [matAutocomplete]="auto">
+                                    <mat-autocomplete #auto="matAutocomplete"
+                                        [displayWith]="displayUnitTypeFn.bind(this)">
+                                        <mat-option *ngFor="let option of options" [value]="option.lov_storevalue">
+                                            {{option.lov_displayvalue}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="labelStatus">Status </label>
+                                <mat-radio-group formControlName="comp_status" (change)="masterFormGroup.patchValue({
+                                    comp_status: $event.source.value
+                                  });">
+                                    <mat-radio-button class="radioPadding" value='O'
+                                        [checked]="this.masterFormGroup.value.comp_status=='O'">Open
+                                    </mat-radio-button>
+                                    <mat-radio-button class="radioPadding" color="warn" value="C"
+                                        [checked]="this.masterFormGroup.value.comp_status=='C'">Closed
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="labelStatus">Urgent</label>
+                                <mat-radio-group formControlName="comp_isurgent" (change)="masterFormGroup.patchValue({
+                                    comp_isurgent: $event.source.value
+                                });">
+                                    <mat-radio-button class="radioPadding" value="Y"
+                                        [checked]="this.masterFormGroup.value.comp_isurgent=='Y'">
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button class="radioPadding" color="warn" value="N"
+                                        [checked]="this.masterFormGroup.value.comp_isurgent=='N'">No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field>
+                                    <!-- <mat-label>Title</mat-label> -->
+                                    <input matInput type="text" placeholder="Title" formControlName="comp_title"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="labelStatus">Description</label>
+                                <mat-form-field class="example-full-width">
+                                    <textarea matInput formControlName="comp_desc" required autocomplete="off"
+                                        placeholder="Write here"></textarea>
+                                    <mat-error *ngIf="this.masterFormGroup.get('comp_desc').invalid">Please write
+                                        Description</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="labelStatus">Related to</label>
+                                <mat-radio-group formControlName="comp_relatedto" (change)="masterFormGroup.patchValue({
+                                    comp_relatedto: $event.source.value
+                                });">
+                                    <mat-radio-button class="radioPadding" value="U"
+                                        [checked]="this.masterFormGroup.value.comp_relatedto=='U'">
+                                        Unit
+                                    </mat-radio-button>
+                                    <mat-radio-button class="radioPadding" color="warn" value="C"
+                                        [checked]="this.masterFormGroup.value.comp_relatedto=='C'">Common Amenities
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Attachments</h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <img src="./../assets/images/avatar.png" alt="Avatar"
+                                            style="width:80px;margin: 8%" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <img src="./../assets/images/avatar.png" alt="Avatar"
+                                            style="width:80px;margin: 8%" />
+                                    </div>
+                                    <!-- 
+                                    <div class="col-md-3">
+                                        <button md-raised-button class="btn">View All</button>
+          
+          
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <!-- /*    <div class="row">
+                            <div class="col-md-6">
+                                <h4>Comments</h4>
+                                <div style="height:200px;background-color: transparent">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <img src="./../assets/images/avatar.png" alt="Avatar"
+                                                style="width:40px;border-radius: 50%;margin: 8%" />
+                                        </div>
+
+                                        <div class="col-md-8">
+                                            <mat-form-field class="example-full-width">
+                                                <textarea rows="2" matInput placeholder="Comment" type="text" readonly>
+                                                </textarea>
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Name" type="text" readonly>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Flat No." type="text" readonly>
+                                            </mat-form-field>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">
+                                <button md-raised-button class="btn">View All</button>
+                            </div> 
+                        </div>  -->
+
+                    </div>
+
+                    <div class="button-container">
+                        <div class="button-left"></div>
+                        <div class="button-right">
+                            <button mat-raised-button class="btn-solid">
+                                <mat-icon>save</mat-icon>
+                                <span>Save</span>
+                            </button>
+                            <button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                            <button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+                                <mat-icon>clear</mat-icon>
+                                <span>Cancel</span>
+                            </button>
+                        </div>
+                    </div>
+                    {{ this.masterFormGroup.value | json }}
+
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card *ngIf="isForm">
+            <div class="modal-form-container">
+                <h4 class="modal-form-title">Give Response</h4>
+                <div class="content">
+                    <form [formGroup]="societyForm" class="container-fluid" novalidate (ngSubmit)="onSubmit()">
+                        <!-- <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Name*" type="text">
+                                </mat-form-field>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <textarea rows="2" matInput placeholder="Give Response" type="text"
+                                        formControlName="comp_response">
+                                    </textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6 resp-status-dropdown">
+                                <mat-form-field>
+                                    <mat-label>Response Status</mat-label>
+                                    <mat-select>
+                                        <mat-option value="resolved">
+                                            Resolved
+                                        </mat-option>
+                                        <mat-option value="unresolved">
+                                            UnResolved
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <!-- <div class="row"> -->
+                        <div class="button-container modal-buttons">
+                            <div class="button-left"></div>
+                            <div class="button-right">
+                                <button mat-raised-button class="btn-solid">Save</button>
+                                <button mat-flat-button class="btn-solid" type="button"
+                                    (click)="resetForm()">Reset</button>
+                                <button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+                                    <mat-icon>clear</mat-icon>
+                                    <span>Cancel</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- {{ this.societyForm.value | json }} -->
+                    </form>
+                </div>
+            </div>
+        </mat-card>
+
+        <dwlz-datatable [configuration]="complainConf" [dataTransformation]="responseDataTransform"
+            [dataSource]="dataSourceFn" (selected)="emitSelected($event)" *ngIf="!isForm"></dwlz-datatable>
+
+        <div class="content-header">
+            <div class="content-header-buttons" *ngIf="!isForm">
+                <!-- <button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+                    <mat-icon>add</mat-icon><span>Create</span>
+                </button> -->
+                <button mat-flat-button class="btn-solid" type="button" (click)="openFilterModal(filterDialog)">
+                    <mat-icon>filter_list</mat-icon><span>Filter</span>
+                </button>
+            </div>
+        </div>
+    </div>

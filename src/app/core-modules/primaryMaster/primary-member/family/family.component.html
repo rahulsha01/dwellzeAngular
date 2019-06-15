@@ -1,0 +1,195 @@
+<div class="modal-form-container full-width-dialog">
+  <h4 class="modal-form-title">Family Details</h4>
+
+  <div class="content">
+    <form [formGroup]="familyForm" class="container-fluid" (ngSubmit)="onSubmit()" novalidate>
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="mf_firstname" InitCapital placeholder="First Name" required
+              autocomplete="off">
+            <mat-error *ngIf="this.familyForm.get('mf_firstname').invalid">
+              Please
+              Enter Valid Name </mat-error>
+          </mat-form-field>
+        </div>
+        ​
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text" formControlName="mf_lastname" InitCapital placeholder="Last Name" required
+              autocomplete="off">
+            <mat-error *ngIf="this.familyForm.get('mf_lastname').invalid">
+              Please
+              Enter Valid Name </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="picker2" placeholder="Date of Birth" required formControlName="mf_dob">
+            <mat-error *ngIf="this.familyForm.get('mf_dob').invalid">
+              Please Select Birth Date </mat-error>
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>      ​
+
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <!-- <mat-label>Mobile</mat-label> -->
+            <input matInput type="text" formControlName="mf_mobile" placeholder="Mobile" required MobileNumber
+              autocomplete="off">
+            <mat-error *ngIf="this.familyForm.get('mf_mobile').invalid">
+              Please
+              Enter Valid Contact Number </mat-error>
+            <mat-hint><strong>3,10 or 11 digits allowed</strong></mat-hint>
+          </mat-form-field>
+        </div>
+        ​
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input matInput type="email" formControlName="mf_email" placeholder="Email" required autocomplete="off">
+            <mat-error *ngIf="this.familyForm.get('mf_email').invalid">
+              Please
+              Enter Valid Email </mat-error>
+          </mat-form-field>
+        </div>
+        ​
+
+        <div class="col-md-4">
+          <div>
+            <label class="labelStatus">Photo </label><br />
+            <!-- <img [src]="imgSrc" class="img-thumbnail" style="max-width:100px;max-height:60px" /> -->
+            <!-- <button type="button" class="btn-solid removeBtn" (click)="deleteImage()"> X</button> -->
+          </div>
+          <div class="image-placeholder">
+            <div class="new-image" *ngIf="!imageFiles.length"></div>
+            <div class="placeholder-wrapper">
+              <div class="col-sm-6 image-uploaded-wrapper" *ngFor="let image of imageFiles; index as i">
+                <img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+                <span (click)="removeImage(i)" title="Remove image" *ngIf="image.fileSrc">
+                  <mat-icon>highlight_off</mat-icon>
+                </span>
+              </div>
+            </div>
+
+            <input type="file" accept="image/*" (change)="imageUpload($event)">
+          </div>
+        </div>
+      </div>
+      <!-- 
+        <div class="col-md-4">
+          <label class="labelStatus">Notify with Notification</label>
+          <mat-radio-group formControlName="mf_notify" (change)="radioChange($event.value)">
+            <mat-radio-button class="radioPadding" value='Y' [checked]="this.familyForm.value.mf_notify=='Y'">Yes
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N"
+              [checked]="this.familyForm.value.mf_notify=='N'">No
+            </mat-radio-button>
+          </mat-radio-group>
+        </div> -->
+      <!-- </div> -->
+      ​<div class="row">
+        <div class="col-md-4">
+          <label class="labelStatus">Status &nbsp;*</label>
+          <mat-radio-group formControlName="mf_notify" (change)="radioChange($event.value)">
+            <mat-radio-button class="radioPadding" value='Y' [checked]="this.familyForm.value.mf_notify=='Y'">Active
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N"
+              [checked]="this.familyForm.value.mf_notify=='N'">Inactive
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-md-4">
+          <label class="labelStatus">Gender &nbsp;*</label>
+          <mat-radio-group formControlName="mf_gender" (change)="radioChange($event.value)">
+            <mat-radio-button class="radioPadding" value='M' [checked]="this.familyForm.value.mf_gender=='M'">Male
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" value="F" [checked]="this.familyForm.value.mf_gender=='F'">Female
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="col-md-4">
+          <label class="labelStatus">Residing&nbsp;*</label>
+          <mat-radio-group formControlName="mf_sms" (change)="radioChange($event.value)">
+            <mat-radio-button class="radioPadding" value='Y' [checked]="this.familyForm.value.mf_sms=='Y'">Yes
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N" [checked]="this.familyForm.value.mf_sms=='N'">
+              No
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text" formControlName="mf_profession" InitCapital placeholder="Profession" required
+              autocomplete="off">
+            <mat-error *ngIf="this.familyForm.get('mf_profession').invalid">
+              Please
+              Enter Valid Profession </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field class="example-full-width">
+            <mat-select placeholder="Relation" formControlName="mf_relation" required>
+              <mat-option *ngFor="let option of options" [value]="option.lov_storevalue">
+                {{option.lov_displayvalue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="this.familyForm.get('mf_relation').invalid">
+              Please
+              Enter Valid Relation </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4" style="display: flex;align-items: center;">
+          <label class="labelStatus">Joint Owner *</label>
+          <mat-radio-group formControlName="mf_main" (change)="radioChange($event.value)">
+            <mat-radio-button class="radioPadding" value='Y' [checked]="this.familyForm.value.mf_main=='Y'">Yes
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N"
+              [checked]="this.familyForm.value.mf_main=='N'">No
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <!-- <div class="col-md-4">
+          <label class="labelStatus">Other member for communication&nbsp;*</label>
+          <mat-radio-group formControlName="mf_sms" (change)="radioChange($event.value)">
+            <mat-radio-button class="radioPadding" value='Y' [checked]="this.familyForm.value.mf_sms=='Y'">Yes
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N" [checked]="this.familyForm.value.mf_sms=='N'">
+              No
+            </mat-radio-button>
+          </mat-radio-group>
+        </div> -->
+
+      </div>
+      <div class="button-container modal-buttons">
+        <div class="button-left"></div>
+        <div class="button-right">
+          <button mat-raised-button class="btn-solid">
+            <mat-icon>save</mat-icon>
+            <span>Save</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" (click)="closeForm(true)">
+            <mat-icon>clear</mat-icon>
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+      <!-- </div> -->
+
+    </form>
+    <!-- {{this.familyForm.value | json}} -->
+  </div>
+</div>

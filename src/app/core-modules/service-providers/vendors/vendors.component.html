@@ -1,0 +1,300 @@
+<div class="content">
+
+  <div *ngIf="displayService">
+    <dwlz-datatable [configuration]="serviceConf" [dataSource]="serviceDataSourceFn" (selected)="emitSelectedService($event)">
+    </dwlz-datatable>
+    <div class="button-right">
+      <button mat-raised-button class="btn-solid" (click)="openServiceFilterModal()">
+        <mat-icon>filter_list</mat-icon>
+        <span>Filter</span>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="displayVendors">
+    <div class="serviceLabel">
+      <label>Services Name:{{selectedServices}}</label>
+    </div>
+
+    <dwlz-datatable [configuration]="vendorConf" [newFormData]="metaData" [dataSource]="vendorDataSourceFn" (selected)="emitSelectedVendor($event)">
+    </dwlz-datatable>
+
+    <div class="button-right">
+      <button mat-flat-button class="btn-solid" type="button" (click)="serviceList()">
+        <mat-icon>list</mat-icon>
+        <span>Service List</span>
+      </button>
+      <button mat-flat-button class="btn-solid" type="button" style="margin-right: 10px" (click)="openVendorFilterModal()">
+        <mat-icon>filter_list</mat-icon>
+        <span>Filter</span>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="singleVendor" class="vendorDiv">
+    <h3>Vendor Information</h3>
+
+    <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
+      <mat-tab label="Personal">
+        <div class="row">
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Vendor Name" readonly [value]="vendorInfoArr.vnd_name">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email ID " readonly [value]="vendorInfoArr.vnd_email">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Mobile Number" readonly [value]="vendorInfoArr.vnd_mobileno">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Gender" readonly [value]="vendorInfoArr.vnd_gender">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Aadhar Card" readonly [value]="vendorInfoArr.vnd_adharcard">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Qualification" readonly [value]="vendorInfoArr.vnd_qualification">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="City" readonly [value]="vendorInfoArr.city_name">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="State" readonly [value]="vendorInfoArr.city_state">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Age" readonly [value]="vendorInfoArr.vnd_dob">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Experience" readonly [value]="vendorInfoArr.vnd_yearsexperience">
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Business">
+        <div class="row">
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="USP" readonly [value]="vendorInfoArr.vnd_usp">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Established Month" readonly [value]="vendorInfoArr.vnd_estmonth">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Established Year" readonly [value]="vendorInfoArr.vnd_estyear">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Payment Option" readonly [value]="vendorInfoArr.vnd_payoption">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Primary Business" readonly [value]="vendorInfoArr.vnd_primbusiness">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Website Name" readonly [value]="vendorInfoArr.vnd_website">
+            </mat-form-field>
+          </div>
+
+      
+
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Documents">
+        <div *ngIf="docArr" class="docImgDiv">
+          <div *ngFor="let doc of docArr">
+            <h3>{{doc.lov_displayvalue}}</h3>
+            <div class="row img-cont">
+              <ng-container *ngFor="let img of doc.Images">
+                <div class="col-md-3 single-doc-img-cont">
+                  <figure>
+                    <img [src]="img.doc_filepath" alt="imh">
+                    <figcaption>{{img.doc_name}}</figcaption>
+                  </figure>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Service">
+        <div *ngIf="subServicesData">
+          <div class="row" style="justify-content: space-between">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Service Name" readonly [value]="ServiceName">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Sub Service Name" readonly [value]="subServicesData.sbs_title">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 15px">
+            <div class="col-md-12">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Sub Service Decription" readonly [value]="subServicesData.sbs_description">
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- </div> -->
+          <div class="row" *ngIf="subServiceAddData">
+            <div class="col-md-3">
+              <mat-form-field class="example-full-width">
+                <mat-label>Timelines in number(s)</mat-label>
+                <input matInput readonly [value]="subServiceAddData.vs_time+subServiceAddData.vs_duration">
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Price Type *" readonly [value]="subServiceAddData.vs_princingtype">
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Price" readonly [value]="subServiceAddData.vs_price">
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Discounted Price" readonly [value]="subServiceAddData.vs_discprice">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 proc-btn">
+              <div class="proc-btn-label">
+                <mat-label>
+                  Procedure
+                </mat-label>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="processSubServicesData[0]">
+            <!-- <div class="col-md-12" style="margin:15px 0">
+              <mat-label>Process</mat-label>
+            </div> -->
+            <div *ngFor="let step of processSubServicesData" class="col-md-12">
+              <!-- <mat-form-field class="example-full-width">
+                <input matInput placeholder="Decription" readonly [value]="step.vsp_desc">
+              </mat-form-field> -->
+              <div class="proc-text">
+                <p>{{step.vsp_desc}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="subServiceBtn">
+            <div class="serviceCount">
+              <p>
+                <span>{{i+1}}</span>
+                <span>out of</span>
+                <span>{{subArr.length}}</span>
+              </p>
+            </div>
+            <div>
+              <button type="button" mat-flat-button class="btn-solid" (click)="prev()" [disabled]="prev_disabled">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <button type="button" mat-flat-button class="btn-solid" (click)="next()" [disabled]="next_disabled">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Feedback" class="">
+        <div class="row">
+          <div class="col-md-4 feedback-tab">
+            <mat-card class="example-card">
+              <mat-card-header>
+                <div mat-card-avatar class="example-header-image">
+                  <mat-icon>person</mat-icon>
+                </div>
+                <mat-card-title>Akshay Kumar</mat-card-title>
+                <mat-card-subtitle>Raheja Society</mat-card-subtitle>
+              </mat-card-header>
+              <mat-divider></mat-divider>
+              <mat-card-content>
+                <p>ServiceName:</p>
+                <p>SubServiceName:</p>
+                <p>Ratings
+                   <span class="rating" *ngFor="let item of rating;let i=index">
+                    <mat-icon [ngClass]="{'worst':rate===1 && i < rate,'lowest':rate===2 && i < rate,'good':rate===3 && i < rate,'better':rate===4 && i < rate,'best':rate===5 && i < rate}">star</mat-icon>
+                  </span></p>
+                <div>
+                  <mat-label><h4>Review</h4></mat-label>
+                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                </div>
+                <div>
+                  <mat-label>Date:</mat-label>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div class="button-right">
+      <button mat-raised-button class="btn-solid" (click)="onCancel()">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancel</span>
+      </button>
+      <button mat-raised-button class="btn-solid" (click)="onApproved()">
+        <mat-icon>save</mat-icon>
+        <span>Approve</span>
+      </button>
+    </div>
+
+  </div>
+</div>

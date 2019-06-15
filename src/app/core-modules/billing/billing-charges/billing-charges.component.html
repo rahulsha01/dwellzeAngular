@@ -1,0 +1,154 @@
+<div class="content-wrapper">
+	<div class="content">
+		<mat-card *ngIf="isForm">
+			<mat-card-content>
+				<form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit()">
+					<div class="container-fluid fields-container">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-2" style="align-self: center;max-width: 11%">
+										<label>Head&nbsp;*</label>
+									</div>
+									<div class="col-md-5">
+										<mat-form-field appearance="standard">
+											<input matInput formControlName="chr_head" (blur)="onHeadBlur($event)"
+												autocomplete="off" [matAutocomplete]="auto"
+												(change)="inpuHeadCatListener()">
+
+											<mat-autocomplete #auto="matAutocomplete"
+												(optionSelected)="onSelectionHeadChanged($event)"
+												[displayWith]="displayHeadTypeFn.bind(this)">
+												<mat-option *ngFor="let option of HeadCategoryOptions"
+													[value]="option.lov_storevalue">
+													{{option.lov_displayvalue}}
+												</mat-option>
+											</mat-autocomplete>
+
+											<mat-error *ngIf="this.masterFormGroup.get('chr_head').invalid">
+												Please Select Valid Head From The List </mat-error>
+										</mat-form-field>
+									</div>
+									<div class="col-md-6"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-2" style="align-self: center;max-width: 10%">
+										<label class="labelStatus">Type &nbsp;*</label>
+									</div>
+									<div class="col-md-4">
+										<mat-radio-group formControlName="chr_calc"
+											(change)="radioChange($event.value)">
+											<mat-radio-button class="radioPadding" value='F'
+												[checked]="this.masterFormGroup.value.chr_calc==='F'">Fixed
+											</mat-radio-button>
+											<mat-radio-button class="radioPadding" value="C"
+												[checked]="this.masterFormGroup.value.chr_calc==='C'">Computed
+											</mat-radio-button>
+										</mat-radio-group>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12" *ngIf="this.masterFormGroup.value.chr_calc==='F'">
+								<div class="row">
+									<div class="col-md-2" style="align-self: center;max-width: 11%">
+										<label>Fixed Charges</label>
+									</div>
+									<div class="col-md-5">
+										<mat-form-field appearance="standard">
+											<input matInput formControlName="chr_fixedamt" autocomplete="off">
+											<mat-error *ngIf="this.masterFormGroup.get('chr_fixedamt').invalid">Please
+												Enter Valid Charges</mat-error>
+										</mat-form-field>
+									</div>
+									<div class="col-md-5"></div>
+								</div>
+							</div>
+
+							<div class="col-md-12" *ngIf="this.masterFormGroup.value.chr_calc==='C'">
+								<div class="row">
+									<div class="col-md-1" style="align-self: center;max-width: 11%">
+										<label>Computed</label>
+									</div>
+									<div class="col-md-2" style="padding-top: 12px;margin-left: 2%">
+										<mat-form-field>
+											<input matInput type="text" formControlName="chr_comp1"
+												[matAutocomplete]="auto" (change)="inpuComputedCatListener()">
+
+											<mat-autocomplete #auto="matAutocomplete"
+												[displayWith]="displayComputedTypeFn.bind(this)">
+												<mat-option *ngFor="let option of ComputedCategoryOptions"
+													[value]="option.lov_storevalue">
+													{{option.lov_displayvalue}}
+												</mat-option>
+											</mat-autocomplete>
+
+											<mat-error *ngIf="this.masterFormGroup.get('chr_comp1').invalid">Please
+												Please Select Valid Category
+											</mat-error>
+										</mat-form-field>
+									</div>
+									<div class="col-md-1"
+										style="display: flex;justify-content: center;	align-self: center;">X</div>
+									<div class="col-md-2">
+										<mat-form-field appearance="standard">
+											<input matInput type="text" formControlName="chr_comp2" class="amountAlign"
+												autocomplete="off">
+											<span matPrefix>₹&nbsp;</span>
+											<!-- <span matSuffix>.00</span> -->
+											<mat-error *ngIf="this.masterFormGroup.get('chr_comp2').invalid">Please
+												Enter Valid Values (Upto 999.00)
+											</mat-error>
+										</mat-form-field>
+									</div>
+									<div class="col-md-6"></div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="button-container">
+						<div class="button-left"></div>
+						<div class="button-right">
+							<button mat-raised-button class="btn-solid">
+								<mat-icon>save</mat-icon>
+								<span>Save</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+								<mat-icon>delete</mat-icon>
+								<span>Delete</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+								<mat-icon>clear</mat-icon>
+								<span>Cancel</span>
+							</button>
+						</div>
+					</div>
+				</form>
+			</mat-card-content>
+		</mat-card>
+
+		<dwlz-datatable [configuration]="billingChargesConf" [dataTransformation]="billingChargesDataTransform"
+			[dataSource]="dataSourceFn" (selected)="emitSelected($event)" *ngIf="!isForm"></dwlz-datatable>
+
+		<div class="content-header">
+			<div class="content-header-buttons" *ngIf="!isForm">
+				<button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+					<mat-icon>add</mat-icon>
+					<span>Create</span>
+				</button>
+				<button mat-flat-button class="btn-solid" type="button" (click)="openFilterModal()">
+					<mat-icon>filter_list</mat-icon>
+					<span>Filter</span>
+				</button>
+			</div>
+		</div>
+	</div>

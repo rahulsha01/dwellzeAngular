@@ -1,0 +1,66 @@
+<div class="content-wrapper">
+  <div class="content" style="overflow:unset">
+    <mat-card style="padding: 0 16px">
+      <mat-card-content>
+
+        <div class="row">
+
+          <div class="col-md-3 req_doc_div">
+            <div>
+              <h3>Request Service</h3>
+              <ul>
+                <li *ngFor="let req_list of requestListArr" [ngClass]="{'active': reqDocName == req_list.lov_displayvalue && display}" (click)="currentRequest(req_list,$event)">
+                  <a>
+                    <span>{{req_list.lov_displayvalue}}</span>
+                    <span class="nav-arrow">
+                      <mat-icon class="hide">keyboard_arrow_down</mat-icon>
+                      <mat-icon class="visible">chevron_right</mat-icon>
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-9 doc_div" *ngIf="display">
+            <h3>Documents for {{reqDocName}}</h3>
+            <form [formGroup]="requestForm">
+              <div class="row" style="height:100%">
+                <div class="col-md-1" style="align-self: center;max-width: 11%">
+                  <label>Amount</label>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <input matInput type="text" formControlName="doc_amt" [value]="amount">
+                    <mat-error *ngIf="this.requestForm.get('doc_amt').invalid">
+                      Please Enter Number Only </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <ul>
+                <li *ngFor="let item of requiredList; index as i" class="displayCheckox">
+                  <mat-checkbox class="example-margin" type="checkbox" (change)="selectedCheckbox($event,i)" [checked]="isSelected(item)">
+                    {{item.lov_displayvalue}} &nbsp;&nbsp;
+                  </mat-checkbox>
+                </li>
+              </ul>
+
+              <div class="button-right">
+                <button mat-raised-button class="btn-solid" (click)="cancel()">
+                  <mat-icon>cancel</mat-icon>
+                  <span>Cancel</span>
+                </button>
+                <button mat-raised-button class="btn-solid" (click)="save()">
+                  <mat-icon>save</mat-icon>
+                  <span>Save</span>
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,246 @@
+<div class="content-wrapper">
+
+  <div class="content">
+
+    <mat-tab-group (selectedTabChange)="switchTab($event)" class="example-stretched-tabs">
+      <!-- <mat-tab-group> -->
+      <mat-tab label="Open">
+
+       <ng-template matTabContent>
+        <div class="content">
+
+          <mat-card *ngIf="isForm">
+            <mat-card-content>
+              <h3 style="padding: 0 26px;font-size:1.3rem">
+                Customer Details
+              </h3>
+              <form class="openReqForm" [formGroup]="processReqForm" (ngSubmit)="Save()">
+
+                <div class="row" formGroupName="proc_req">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input matInput placeholder="First Name" type="text" readonly formControlName="pm_firstname">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input matInput placeholder="Last Name" type="text" readonly formControlName="pm_lastname">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input matInput placeholder="Date" type="date" readonly formControlName="rr_date">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input matInput type="text" placeholder="Wing/Flat No" readonly formControlName="pm_flatno">
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+                <div class="row" formGroupName="request_details">
+                  <div class="col-md-6">
+                    <h3>
+                      Request Details
+                    </h3>
+                  </div>
+                  <div class="col-md-12">
+                    <mat-form-field class="example-full-width">
+                      <textarea matInput placeholder="Decription" formControlName="description"></textarea>
+                      <!-- <mat-error *ngIf="this.broadcastForm.get('message_text').invalid"> Please Enter Message
+                      </mat-error> -->
+                    </mat-form-field>
+                  </div>
+                  <!-- <div class="row img-cont">
+                    <ng-template *ngFor="let img of doc.Images">
+                      <div class="col-md-3 single-doc-img-cont">
+                        <figure>
+                          <img [src]="img.doc_filepath" alt="img">
+                          <figcaption>{{img.doc_name}}</figcaption>
+                        </figure>
+                      </div>
+                    </ng-template>
+                  </div> -->
+                </div>
+
+                <div formGroupName="response_details">
+                  <div class="col-md-4">
+                    <h3>Response Details</h3>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <mat-form-field>
+                        <textarea matInput type="text" formControlName="response" placeholder="Response"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- <ng-template > -->
+                  <div formGroupName="proc_req_payment" *ngIf="!singleOpenRequestData.rr_amount">
+
+                    <div class="row">
+                      <div class="col-md-2">
+                        <label for="" style="color: rgba(0,0,0,.54);">Payment Method:</label>
+                      </div>
+                      <div class="col-md-10">
+                        <mat-radio-group formControlName="payment_method" aria-label="Select an option" (change)="handleChange($event)">
+                          <mat-radio-button class="radioPadding" value="Net_Banking">Net Banking</mat-radio-button>
+                          <mat-radio-button class="radioPadding" value="Credit_Card">Credit Card</mat-radio-button>
+                          <mat-radio-button class="radioPadding" value="Debit_Card">Debit Card</mat-radio-button>
+                          <mat-radio-button class="radioPadding" value="Cash">Cash</mat-radio-button>
+                        </mat-radio-group>
+                      </div>
+                    </div>
+
+                    <div class="row" *ngIf="processReqForm.controls.response_details.controls.proc_req_payment.controls.payment_method.value !== 'Cash'">
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <input matInput type="text" formControlName="bank_name" placeholder="Bank Name">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <input matInput type="text" formControlName="branch_name" placeholder="Branch Name">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6" *ngIf="processReqForm.controls.response_details.controls.proc_req_payment.controls.payment_method.value !== 'Cash'">
+                        <mat-form-field>
+                          <input matInput type="text" formControlName="txn_ref_no" placeholder="Txn Reference No">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <input matInput type="text" formControlName="amt_paid" placeholder="Amount Paid">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- </ng-template> -->
+
+
+                  <div class="row">
+                    <div class="col-md-2" style="align-self: center">
+                      <label class="labelStatus">Status*</label>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-radio-group formControlName="proc_req_status" (change)="radioChange($event)">
+                        <mat-radio-button class="radioPadding" value='O' [checked]="processReqForm.controls.response_details.controls.proc_req_status.value=='O'">Open
+                        </mat-radio-button>
+                        <mat-radio-button class="radioPadding" value="C" [checked]="processReqForm.controls.response_details.controls.proc_req_status.value=='C'"
+                          [disabled]="disabled">
+                          Closed
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div>
+                        <label class="labelStatus">Attachment </label>
+                        <br />
+                      </div>
+                      <div class="image-placeholder">
+                        <div class="new-image" *ngIf="!imageFiles.length"></div>
+                        <div class="placeholder-wrapper">
+                          <div class="col-sm-2 image-uploaded-wrapper" *ngFor="let image of imageFiles; index as i">
+                            <img width="100%" src="{{image.fileSrc}}" alt="">
+                            <span (click)="removeImage(i)"></span>
+                          </div>
+                        </div>
+
+                        <input type="file" accept="image/*" (change)="imageUpload($event)" multiple>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="button-container modal-buttons">
+                  <div class="button-left"></div>
+                  <div class="button-right">
+                    <button mat-raised-button class="btn-solid">
+                      <mat-icon>save</mat-icon>
+                      <span>Save</span>
+                    </button>
+                    <button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+                      <mat-icon>clear</mat-icon>
+                      <span>Cancel</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+            </mat-card-content>
+          </mat-card>
+
+          <dwlz-datatable [configuration]="openRequestConfig" [dataSource]="requestDataSourceFn" (selected)="emitSelectedRequest($event)"
+            [newFormData]="metaDataOpen" *ngIf="!isForm">
+          </dwlz-datatable>
+        </div>
+       </ng-template>
+
+      </mat-tab>
+
+      <mat-tab label="Closed">
+
+        <ng-template matTabContent>
+          <div class="content">
+
+
+            <mat-card *ngIf="isClosed">
+
+              <mat-card-content>
+
+                <div class="row" *ngIf="closedData">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input matInput placeholder="First Name" type="text" readonly [value]="closedData.pm_firstname">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input matInput placeholder="Last Name" type="text" readonly [value]="closedData.pm_lastname">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input matInput placeholder="Date" type="date" readonly [value]="closedData.rr_date">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input matInput type="text" placeholder="Flat Number" readonly [value]="closedData.pm_flatno">
+                    </mat-form-field>
+                  </div>
+
+                </div>
+                <div class="closeDiv">
+                  <button mat-raised-button class="btn-solid" type="button" (click)="closeClosedForm()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </mat-card-content>
+
+            </mat-card>
+
+            <dwlz-datatable [configuration]="openRequestConfig" [dataSource]="requestDataSourceFn" (selected)="emitSelectedClosedRequest($event)"
+              [newFormData]="metaDataOpen" *ngIf="!isClosed">
+            </dwlz-datatable>
+
+          </div>
+
+        </ng-template>
+
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </div>
+</div>

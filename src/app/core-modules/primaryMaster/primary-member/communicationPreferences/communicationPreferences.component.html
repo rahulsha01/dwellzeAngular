@@ -1,0 +1,159 @@
+<div class="modal-form-container">
+  <h4 class="modal-form-title">Communication Preferences Details</h4>
+  <div class="content">
+    <form [formGroup]="communicationPreferencesForm" class="container-fluid" novalidate (ngSubmit)="onSubmit()">
+
+      <div class="toggle-btn">
+        <h5>Communication Method</h5>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Email</label>
+          </div>
+          <div class="col-md-6">
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary">{{action}}</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="toggle-btn">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">SMS</label>
+          </div>
+          <div class="col-md-6">
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary">{{action}}</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <div class="toggle-btn">
+        <h5>Push Notification</h5>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Visitor</label>
+          </div>
+          <div class="col-md-6">Self
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary"></mat-slide-toggle>Spouse
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-btn">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Bill Payment Reminders</label>
+          </div>
+          <div class="col-md-6">Self
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary"></mat-slide-toggle>Spouse
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-btn">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Staff Arrival</label>
+          </div>
+          <div class="col-md-6">Self
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary"></mat-slide-toggle>Spouse
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <div class="toggle-btn">
+        <h5>Show Contact Details</h5>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Admin</label>
+          </div>
+          <div class="col-md-6">
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary">{{action}}</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-btn">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Society Committee</label>
+          </div>
+          <div class="col-md-6">
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary">{{action}}</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-btn">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Society Member</label>
+          </div>
+          <div class="col-md-6">
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary">{{action}}</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <div class="toggle-btn">
+        <h5>Show Profession</h5>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Admin</label>
+          </div>
+          <div class="col-md-6">
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary">{{action}}</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-btn">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Society Committee</label>
+          </div>
+          <div class="col-md-6">
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary">{{action}}</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-btn">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="labelStatus">Society Member</label>
+          </div>
+          <div class="col-md-6">
+            <mat-slide-toggle formControlName="sg_isactive" (change)="onChange($event)" [(ngModel)]="status"
+              color="primary">{{action}}</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+      <hr>
+
+
+      <div class="button-container modal-buttons">
+        <div class="button-left"></div>
+        <div class="button-right">
+          <button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+            <mat-icon>clear</mat-icon>
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

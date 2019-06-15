@@ -1,0 +1,164 @@
+<div class="modal-form-container">
+  <h4 class="modal-form-title">Staff Details</h4>
+
+
+  <div class="content">
+    <form [formGroup]="staffForm" (ngSubmit)="onSubmit()" class="container-fluid" novalidate>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Name" formControlName="sv_name" InitCapital required type="text">
+            <mat-error *ngIf="this.staffForm.get('sv_name').invalid">
+              Please
+              Enter Valid Name </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="picker1" formControlName="sv_date" (focus)="startDateModal()"
+              placeholder="Start Date *">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 disabled="false"></mat-datepicker>
+
+            <mat-error *ngIf="this.staffForm.get('sv_date').invalid">
+              Please Select Start Date </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="labelStatus">Gender &nbsp;*</label>
+          <mat-radio-group formControlName="sv_gender" (change)="radioChange($event.value)">
+            <mat-radio-button class="radioPadding" value='M' [checked]="this.staffForm.value.sv_gender=='M'">Male
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" value="F" [checked]="this.staffForm.value.sv_gender=='F'">Female
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="col-md-6">
+          <label class="labelStatus">Status &nbsp;*</label>
+          <mat-radio-group formControlName="ms_active" (change)="staffForm.patchValue({
+            ms_active: $event.source.value
+          })">
+            <mat-radio-button class="radioPadding" value='Y' [checked]="this.staffForm.value.ms_active=='Y'">
+              Active
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N"
+              [checked]="this.staffForm.value.ms_active=='N'">Inactive
+            </mat-radio-button>
+          </mat-radio-group>
+          ​
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Mobile" required formControlName="sv_mobileno" MobileNumber type="text">
+            <mat-error *ngIf="this.staffForm.get('sv_mobileno').invalid">
+              Please
+              Enter Valid Contact Number (3,10 or 11 digits allowed) </mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <textarea rows="2" matInput placeholder="Address" formControlName="sv_address" required type="number">
+              </textarea>
+            <mat-error *ngIf="this.staffForm.get('sv_address').invalid">
+              Please
+              Enter Valid Address </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col-md-6">
+          <label>Photo
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+          <button md-raised-button class="btn btn-primary" (click)="fileInput.click()">Select</button>
+          <input hidden type="file" #fileInput>
+        </div>
+      </div>
+      <br />
+
+      <div class="row">
+        <div class="col-md-6">
+          <label>KYC Documents</label>&nbsp;&nbsp;
+          <button md-raised-button class="btn btn-primary" (click)="fileInput.click()">Select</button>
+          <input hidden type="file" #fileInput>
+        </div>
+      </div> -->
+
+      <div class="row">
+          <div class="col-md-3">
+            <div>
+              <mat-label>&nbsp;&nbsp; Profile photos </mat-label>
+              <br />
+            </div>
+            <div class="image-placeholder">
+              <div class="new-image" *ngIf="!imageFiles.length"></div>
+              <div class="placeholder-wrapper">
+                <div class="col-sm-3 image-uploaded-wrapper" *ngFor="let image of imageFiles; index as i">
+                  <img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+                  <span (click)="removeImage(i)" title="Remove image" *ngIf="image.fileSrc">
+                    <mat-icon>highlight_off</mat-icon>
+                  </span>
+                </div>
+              </div>
+
+              <input type="file" accept="image/*" (change)="imageUpload($event)">
+            </div>
+          </div>
+
+          <div class="col-md-3">
+              <div>
+                <mat-label>&nbsp;&nbsp; KYC docs </mat-label>
+                <br />
+              </div>
+              <div class="image-placeholder">
+                <div class="new-image" *ngIf="!imageFiles.length"></div>
+                <div class="placeholder-wrapper">
+                  <div class="col-sm-3 image-uploaded-wrapper" *ngFor="let image of imageFiles; index as i">
+                    <img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+                    <span (click)="removeImage(i)" title="Remove image" *ngIf="image.fileSrc">
+                      <mat-icon>highlight_off</mat-icon>
+                    </span>
+                  </div>
+                </div>
+
+                <input type="file" accept="image/*" (change)="imageUpload($event)">
+              </div>
+            </div>
+        </div>
+
+
+      <div class="button-container modal-buttons">
+        <div class="button-left"></div>
+        <div class="button-right">
+          <button mat-raised-button class="btn-solid">
+            <mat-icon>save</mat-icon>
+            <span>Save</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" (click)="closeForm(true)">
+            <mat-icon>clear</mat-icon>
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- {{ this.staffForm.value | json }} -->
+  </div>
+</div>

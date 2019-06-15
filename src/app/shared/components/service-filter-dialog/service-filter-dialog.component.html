@@ -1,0 +1,27 @@
+<form [formGroup]="serviceFilterForm" (ngSubmit)="onSubmit()" class="fltForm">
+    <div *ngFor="let element of data" [ngSwitch]="element.type">
+        <mat-form-field *ngSwitchCase="'text'">
+            <input matInput [placeholder]="element.placeholder" [formControlName]="element.formControlName" [value]="element.val">
+        </mat-form-field>
+        <div *ngSwitchCase="'checkbox'">
+            <label><strong>{{element.placeholder}}</strong></label>
+            <div style="display: flex">
+                <div *ngFor="let city of element.data;let i=index">
+                    <mat-checkbox class="example-margin" type="checkbox"  [value]="city" (change)="selectedCheckbox($event,element.formControlName,city,i)" [checked]="selectChecked(element.formControlName,city,i)">
+                        {{city}}
+                      </mat-checkbox>
+                    </div>
+            </div>
+            </div>
+    </div>
+     
+    <div class="filter-button">
+        <div class="button-left"></div>
+        <div class="button-right">
+            <button mat-flat-button class="btn-solid" type="button" (click)="reset()"><mat-icon>refresh</mat-icon><span>Reset</span></button>
+          <button mat-raised-button class="btn-solid"><mat-icon>filter</mat-icon><span>Filter</span></button>
+          <button mat-flat-button class="btn-solid" type="button" (click)="closeForm()"><mat-icon>clear</mat-icon><span>Cancel</span></button>
+        </div>
+      </div>
+</form>
+<!-- <p>{{this.serviceFilterForm.value|json}}</p> -->

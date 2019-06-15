@@ -1,0 +1,54 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="container">
+          <div class="row login-main">
+              <div class="col-md-6 login-form-content">
+                <div class="login-header">
+                  <h2>Login</h2>
+                </div>
+                <div class="invalidDetails" *ngIf="invalidDetails">
+                  <mat-error>
+                    Invalid Username or Password 
+                  </mat-error>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <!-- <label for="username">Username</label>
+                    <input type="text" name="username" class="form-control" formControlName="auth_user_id"> -->
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Username" formControlName="userID">
+                        <mat-error *ngIf="this.loginForm.get('userID').invalid">
+                          Please Enter Username
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+                </div>
+      
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <!-- <label for="password">Password</label>
+                    <input type="text" name="password" class="form-control" formControlName="auth_user_password"> -->
+                    <mat-form-field>
+                        <input matInput type="password" placeholder="Password" formControlName="pwd">
+                        <mat-error *ngIf="this.loginForm.get('userID').invalid">
+                            Please Enter Password
+                            </mat-error>
+                      </mat-form-field>
+                    <div class="login-forgot-pwd"><span><a href="#">forgot Password?</a></span></div>
+                  </div>
+                  
+                </div>
+                <div class="col-md-12 login-btn">
+                    <button mat-raised-button class="btn-solid" (click)="onSubmit()">SignIn</button>
+                    <button mat-raised-button class="btn-solid" type="reset" (click)="onReset()">Reset</button>
+                  </div>
+              </div>
+      
+              <div class="col-md-6 login-image">
+                <div class="login-image-content">
+                  <!-- <img src="../../../../../assets/images/login-image.jpg" alt=""> -->
+                </div>
+              </div>
+      
+          </div>
+        </div>
+      </form>

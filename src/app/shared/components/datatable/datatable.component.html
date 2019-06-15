@@ -1,0 +1,25 @@
+<div class="datatable-container" > 
+  <!-- <mat-form-field style="width: 35%;"> -->
+    <input matInput id="name"  (keyup)="applyFilter($event.target.value)" placeholder="Search"  *ngIf="searchable" class="search">
+  <!-- </mat-form-field> -->
+
+  <div class="loader"  *ngIf="isLoadingResults">Loading...</div>
+  <!-- <mat-spinner *ngIf="isLoadingResults" ></mat-spinner> -->
+  <mat-table *ngIf="data" [dataSource]="data" class="mat-elevation-z8">
+    <ng-container *ngFor="let cols of displayVal" matColumnDef={{cols.sortValue}}>
+      <mat-header-cell *matHeaderCellDef [ngStyle]="{'flex-basis.%':cols.width}">{{cols.displayValue}}</mat-header-cell>
+      <mat-cell [ngStyle]="{'flex-basis.%':cols.width}" *matCellDef="let element;let i = index"
+        (click)="clickHandler(i)">
+        <ng-container>
+          {{element[cols.sortValue]}}
+        </ng-container>
+
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns;  sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator [length]="resultsLength" [pageSize]="10" showFirstLastButtons></mat-paginator>
+</div>

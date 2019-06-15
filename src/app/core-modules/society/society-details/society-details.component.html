@@ -1,0 +1,206 @@
+<div class="content-wrapper">
+  <mat-tab-group mat-align-tabs="left">
+    <mat-tab label="Society">
+      <ng-template matTabContent>
+        <div class="modal-form-container">
+          <h4 class="modal-form-title">Society Details</h4>
+          <div class="content">
+            <form [formGroup]="societyForm" class="container-fluid" novalidate (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Name*" type="text" formControlName="so_name">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6 rdbtn">
+                  <label>Type*</label>
+                  <mat-radio-group formControlName="so_type">
+                    <mat-radio-button class="radioPadding" value="H" [checked]="societyForm.value.so_type=='H'">Housing
+                    </mat-radio-button>
+                    <mat-radio-button class="radioPadding" value="C" [checked]="societyForm.value.so_type=='C'">
+                      Commercial
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Registration Id*" type="text" formControlName="so_registrationid">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Registration Date*" formControlName="so_registration_dt">
+                  </mat-form-field>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Number of Flats / offices*" type="text"
+                      formControlName="so_nbrofunits">
+                    <mat-error *ngIf="this.societyForm.get('so_nbrofunits').invalid">
+                      Please Enter Valid Number </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Number of Parking*" type="text" formControlName="so_noofparkings">
+                    <mat-error *ngIf="this.societyForm.get('so_noofparkings').invalid">
+                      Please Enter Valid Number </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                  <div>
+                    <label class="labelStatus">Society Image </label><br />
+                  </div>
+                  <div class="image-placeholder">
+                    <div class="new-image" *ngIf="!imageFiles.length"></div>
+                    <div class="placeholder-wrapper">
+                      <div class="col-sm-3 image-uploaded-wrapper" *ngFor="let image of imageFiles; index as i">
+                        <img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+                        <span (click)="removeImage(i)" title="Remove image" *ngIf="image.fileSrc">
+                          <mat-icon>highlight_off</mat-icon>
+                        </span>
+                      </div>
+                    </div>
+
+                    <input type="file" accept="image/*" (change)="imageUpload($event)">
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                    <textarea matInput placeholder="Address*" type="text" formControlName="so_address"></textarea>
+                    <mat-error *ngIf="this.societyForm.get('so_address').invalid">
+                      Please Enter Valid Address </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Pincode*" type="text" formControlName="so_pincode">
+                    <mat-error *ngIf="this.societyForm.get('so_pincode').invalid">
+                      Please Enter Valid Pincode </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Bank Name*"  type="text" formControlName="so_bankname">
+                    <mat-error *ngIf="this.societyForm.get('so_bankname').invalid">
+                      Please Enter Valid Bank Name </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Bank Branch*" type="text" formControlName="so_branch">
+                    <mat-error *ngIf="this.societyForm.get('so_branch').invalid">
+                      Please Enter Valid Bank Branch </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Bank Account Number*" type="text" formControlName="so_bankacno">
+                    <mat-error *ngIf="this.societyForm.get('so_bankacno').invalid">
+                      Please Enter Valid Bank Account Number </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- <div class="row"> -->
+              <div class="button-container modal-buttons">
+                <div class="button-left"></div>
+                <div class="button-right">
+                  <button mat-raised-button class="btn-solid">Save</button>
+                  <button mat-flat-button class="btn-solid" type="button" (click)="resetForm()">Reset</button>
+                </div>
+              </div>
+              <!-- {{ societyForm.value | json }} -->
+            </form>
+
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Wings">
+      <ng-template matTabContent>
+
+        <div class="content">
+          <div class="content-header">
+            <div class="content-header-buttons">
+              <button mat-flat-button class="btn-solid" type="button" (click)="openWingsForm()">
+                <mat-icon>add</mat-icon>
+                <span>Create</span>
+              </button>
+            </div>
+          </div>
+          <dwlz-datatable [configuration]="wingsConf" [dataSource]="wingDataSourceFn"
+            [dataTransformation]="wingDataTransform" (selected)="emitSelectedWings($event)"></dwlz-datatable>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Amenities">
+      <ng-template matTabContent>
+        <div class="content">
+          <div class="content-header">
+            <div class="content-header-buttons">
+              <button mat-flat-button class="btn-solid" type="button" (click)="openAmenitiesForm()">
+                <mat-icon>add</mat-icon>
+                <span>Create</span>
+              </button>
+            </div>
+          </div>
+          <dwlz-datatable [configuration]="amenityConf" [dataTransformation]="amenitiesDataTransform"
+            [dataSource]="amenityDataSourceFn" (selected)="emitSelectedAmenities($event)"></dwlz-datatable>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Assets">
+      <ng-template matTabContent>
+
+        <div class="content">
+          <div class="content-header">
+            <div class="content-header-buttons">
+              <button mat-flat-button class="btn-solid" type="button" (click)="openAssetsForm()">
+                <mat-icon>add</mat-icon>
+                <span>Create</span>
+              </button>
+            </div>
+          </div>
+          <dwlz-datatable [configuration]="assetsConf" [dataTransformation]="assetsDataTransform"
+            [dataSource]="assetsDataSourceFn" (selected)="emitSelectedAssets($event)"></dwlz-datatable>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Gates">
+      <ng-template matTabContent>
+
+        <div class="content">
+          <div class="content-header">
+            <div class="content-header-buttons">
+              <button mat-flat-button class="btn-solid" type="button" (click)="openGatesForm()">
+                <mat-icon>add</mat-icon>
+                <span>Create</span>
+              </button>
+            </div>
+          </div>
+          <dwlz-datatable [configuration]="gatesConf" [dataTransformation]="gatesDataTransform"
+            [dataSource]="gatesDataSourceFn" (selected)="emitSelectedGate($event)"></dwlz-datatable>
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

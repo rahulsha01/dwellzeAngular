@@ -1,0 +1,131 @@
+<div class="modal-form-container">
+  <h4 class="modal-form-title">Assets Details</h4>
+
+
+  <div class="content">
+    <form [formGroup]="assetsForm" class="container-fluid" (ngSubmit)="onSubmit()" novalidate>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Asset Name" type="text" formControlName="sas_name">
+            <mat-error *ngIf="this.assetsForm.get('sas_name').invalid">
+              Please
+              Enter Valid Name</mat-error>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-md-6">
+          <label class="labelStatus">Status</label>
+          <mat-radio-group formControlName="sas_isactive" (change)="assetsForm.patchValue({
+            sas_isactive: $event.value
+          })">
+            <mat-radio-button class="radioPadding" value="Y" [checked]="this.assetsForm.value.amty_isactive=='Y'">
+              Active
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N"
+              [checked]="this.assetsForm.value.amty_isactive=='N'">Inactive
+            </mat-radio-button>
+          </mat-radio-group>
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Purchase Cost" type="number" formControlName="sas_value">
+            <mat-error *ngIf="this.assetsForm.get('sas_value').invalid">
+              Please
+              Enter Valid Cost</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input (dateChange)="purchaseDateChanged($event)" formControlName="sas_purdate"  [max]="currentDate" matInput [matDatepicker]="picker1" placeholder="Purchase Date" (click)="startDateModal()">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+
+            <mat-error *ngIf="this.assetsForm.get('sas_purdate').invalid">Please
+              Select Valid Date</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="AMC Supplier" type="text" formControlName="sas_supplier">
+            <mat-error *ngIf="this.assetsForm.get('sas_supplier').invalid">
+              Please
+              Enter Valid Supplier Name</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="AMC Cost" type="number" formControlName="sas_amcamt">
+            <mat-error *ngIf="this.assetsForm.get('sas_amcamt').invalid">
+              Please
+              Enter Valid Cost</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="AMC Frequency" type="number" formControlName="sas_mc_frequency">
+            <mat-error *ngIf="this.assetsForm.get('sas_mc_frequency').invalid">
+              Please
+              Enter Valid Frequency</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field class="example-full-width">
+
+            <input [disabled]="purchaseDate" formControlName="sas_amcdate" (dateChange)="maintenanceDateChanged($event)" [min]="minMaintenanceDate" matInput [matDatepicker]="picker2" placeholder="Maintenance Date" (click)="endDateModal()">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+
+            <mat-error *ngIf="this.assetsForm.get('sas_amcdate').invalid">Please
+              Select Valid Date</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- <p>{{this.purchaseDate}}</p> -->
+
+
+
+
+
+      <div class="button-container modal-buttons">
+        <div class="button-left"></div>
+        <div class="button-right">
+          <button mat-raised-button class="btn-solid">
+            <mat-icon>save</mat-icon>
+            <span>Save</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" (click)="closeForm(true)">
+            <mat-icon>clear</mat-icon>
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- <p>{{assetsForm.value | json}}</p> -->
+
+    </form>
+  </div>
+</div>

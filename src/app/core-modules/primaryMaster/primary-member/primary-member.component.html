@@ -1,0 +1,422 @@
+<div class="content-wrapper">
+  <dwlz-datatable [configuration]="primaryMemberConf" *ngIf="!primaryForm || !tabView" [dataSource]="dataSourceFn"
+    (selected)="emitSelectedPrimary($event)" [newFormData]="filterData"></dwlz-datatable>
+  <div class="content-header">
+    <div class="content-header-buttons" *ngIf="!primaryForm || !tabView">
+      <button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+        <mat-icon>add</mat-icon>
+        <span>Create</span>
+      </button>
+      <button mat-raised-button class="btn-solid" (click)="openFilterModal('primarymember')">
+        <mat-icon>filter_list</mat-icon>
+        <span>Filter</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="content-wrapper">
+  <mat-tab-group (animationDone)="animationEnd(e)" mat-align-tabs="left" *ngIf="tabView">
+    <mat-tab label="Primary Member">
+      <div class="modal-form-container">
+        <h4 class="modal-form-title">Primary Details</h4>
+        <div class="content">
+
+          <div class="button-container" *ngIf="!primaryForm">
+            <div class="button-left"></div>
+            <div class="button-right">
+              <button mat-flat-button class="btn-solid" type="button" (click)="openForm()">Create</button>
+            </div>
+          </div>
+
+          <form [formGroup]="primaryMemberForm" *ngIf="primaryForm" class="container-fluid" novalidate
+            (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" placeholder="First Name" InitCapital required
+                    formControlName="pm_firstname" autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_firstname').invalid">
+                    Please Enter Valid Name </mat-error>
+                </mat-form-field>
+              </div>
+              ​
+              <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" placeholder="Last Name" InitCapital required formControlName="pm_lastname"
+                    autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_lastname').invalid">
+                    Please Enter Valid Name </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Unit Type</mat-label>
+                  <input matInput type="text" formControlName="pm_flattype" (blur)="onBlur($event)"
+                    (change)="flatTypeVal($event)" [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event)"
+                    [displayWith]="displayUnitTypeFn.bind(this)">
+                    <mat-option *ngFor="let option of options" [value]="option.ft_id">
+                      {{option.ft_type}}
+                    </mat-option>
+                  </mat-autocomplete>
+
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_flattype').invalid">
+                    Please Select Valid Unit</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" placeholder="Flat Carpet Area" formControlName="pm_flatcarpetarea"
+                    autocomplete="off" readonly>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-1">
+                <mat-form-field>
+                  <mat-select placeholder="Wing" formControlName="pm_wing" required>
+                    <mat-option *ngFor="let option of wingData" [value]="option.sw_id">
+                      {{option.sw_name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-1">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Flat No</mat-label>
+                  <input matInput type="text" formControlName="pm_flatno" required autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_flatno').invalid">
+                    Please Enter Valid Flat No</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            ​
+            <div class="row">
+
+              <div class="col-md-3">
+                <label class="labelStatus">Gender &nbsp;*</label>
+                <br />
+                <mat-radio-group formControlName="pm_gender" (change)="radioChange($event.value)">
+                  <mat-radio-button class="radioPadding" value='M'
+                    [checked]="this.primaryMemberForm.value.pm_gender=='M'">Male
+                  </mat-radio-button>
+                  <mat-radio-button class="radioPadding" value="F"
+                    [checked]="this.primaryMemberForm.value.pm_gender=='F'">Female
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                  <input [max]="minDate" matInput [matDatepicker]="picker2" placeholder="Date of Birth" required
+                    formControlName="pm_dob" (focus)="dobModal()">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_dob').invalid">
+                    Please Select Birth Date </mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" placeholder="Share Certificate From" required
+                    formControlName="pm_sharecertificatestartno" autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_sharecertificatestartno').invalid">
+                    Please
+                    Enter Share Certificate Start No Between 5 to 8 digits</mat-error>
+                </mat-form-field>
+              </div>
+              ​
+              <div class="col-md-2">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" placeholder="Share Certificate To" required
+                    formControlName="pm_sharecertificateendno" autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_sharecertificateendno').invalid">
+                    Please
+                    Enter Share Certificate End No Between 5 to 8 digits</mat-error>
+                </mat-form-field>
+              </div>
+
+
+              ​
+
+
+            </div>
+            ​
+            <div class="row">
+              <div class="col-md-" style="max-width: 125px; margin-left: 15px;">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="number" placeholder="Mobile" required formControlName="pm_mobile" MobileNumber
+                    autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_mobile').invalid">
+                    Please Enter Valid Contact Number (3,10 or 11 digits allowed) </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-" style="max-width: 125px; margin-left: 15px;">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="number" placeholder="Intercom Number" required formControlName="pm_intercom"
+                    autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_intercom').invalid">
+                    Please Enter Valid Intercom Number (3,10 or 11 digits allowed) </mat-error>
+                </mat-form-field>
+              </div>
+              ​
+              <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="email" placeholder="Email" required formControlName="pm_email"
+                    autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_email').invalid">
+                    Please
+                    Enter Valid Email </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" placeholder="Membership Id" required formControlName="pm_membershipid"
+                    autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_membershipid').invalid">
+                    Please Enter Valid Membership Id like ABCD1234</mat-error>
+                </mat-form-field>
+              </div>
+
+
+              <!-- <div class="col-md-2">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" placeholder="Professional Description" InitCapital
+                    formControlName="pm_professionaldescription" autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_professionaldescription').invalid">
+                    Please
+                    Enter Professional Description </mat-error>
+                </mat-form-field>
+              </div> -->
+
+              <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                  <input matInput [matDatepicker]="picker1" (focus)="startDateModal()" placeholder="Purchase Date"
+                    required formControlName="pm_flatpurchase">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_flatpurchase').invalid">
+                    Please Select Flat Purchase Date </mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+            </div>
+            ​ ​
+            <div class="row">
+              ​
+              <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" placeholder="Profession" InitCapital formControlName="pm_profession"
+                    autocomplete="off">
+                  <mat-error *ngIf="this.primaryMemberForm.get('pm_profession').invalid">
+                    Please Enter Profession </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-3">
+                <div class="row">
+                  <div class="col-md-3">
+                    <label class="labelStatus"> Photo </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="image-placeholder">
+                      <div class="new-image" *ngIf="!imageFiles.length"></div>
+                      <div class="placeholder-wrapper">
+                        <div class="col-sm-6 image-uploaded-wrapper" *ngFor="let image of imageFiles; index as i">
+                          <img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+                          <span (click)="removeImage(i)" title="Remove image" *ngIf="image.fileSrc">
+                            <mat-icon>highlight_off</mat-icon>
+                          </span>
+                        </div>
+                      </div>
+                      <input type="file" accept="image/*" (change)="imageUpload($event)">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label class="labelStatus">Status &nbsp;*</label>
+                <mat-radio-group formControlName="pm_isactive" (change)="radioChange($event.value)">
+                  <mat-radio-button class="radioPadding" value='Y'
+                    [checked]="this.primaryMemberForm.value.pm_isactive=='Y'">Active
+                  </mat-radio-button>
+                  <mat-radio-button class="radioPadding" color="warn" value="N"
+                    [checked]="this.primaryMemberForm.value.pm_isactive=='N'">Inactive
+                  </mat-radio-button>
+                </mat-radio-group>
+                ​
+              </div>
+              ​
+            </div>
+
+            <div class="button-container modal-buttons">
+              <div class="button-left"></div>
+              <div class="button-right">
+                <button mat-flat-button class="btn-solid" *ngIf="!primaryForm" type="button" (click)="openForm()">Add
+                  New
+                </button>
+                <button mat-raised-button class="btn-solid" *ngIf="primaryForm" (click)="closeForm()">
+                  <mat-icon>clear</mat-icon> Cancel
+                </button>
+                <button mat-raised-button class="btn-solid" *ngIf="primaryForm">
+                  <mat-icon>save </mat-icon> Save
+                </button>
+
+              </div>
+            </div>
+
+          </form>
+          <!-- {{this.primaryMemberForm.value | json }} -->
+        </div>
+      </div>
+
+    </mat-tab>
+    <mat-tab label="Family">
+      <ng-template matTabContent>
+        <div class="content">
+          <div class="content-header">
+            <div class="content-header-buttons">
+              <button mat-flat-button class="btn-solid" type="button" (click)="openFamilyForm()">
+                <mat-icon>add</mat-icon>&nbsp;
+                <span>&nbsp;&nbsp;&nbsp; Create</span>
+              </button>
+            </div>
+          </div>
+          <dwlz-datatable [configuration]="familyConf" [dataSource]="familyDataSourceFn"
+            (selected)="emitSelectedFamily($event)"></dwlz-datatable>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Vehicle">
+      <ng-template matTabContent>
+        <div class="content">
+          <div class="content-header">
+            <div class="content-header-buttons">
+              <button mat-flat-button class="btn-solid" type="button" (click)="openVehicleForm()">
+                <mat-icon>add</mat-icon>
+                <span>Create</span>
+              </button>
+            </div>
+          </div>
+          <dwlz-datatable [configuration]="vehicleConf" [dataTransformation]="vehicleDataTransform"
+            [dataSource]="vehicleDataSourceFn" (selected)="emitSelectedVehicle($event)"></dwlz-datatable>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Staff">
+      <ng-template matTabContent>
+        <div class="content">
+          <div class="content-header">
+            <div class="content-header-buttons">
+              <button mat-flat-button class="btn-solid" type="button" (click)="openStaffForm()">
+                <mat-icon>add</mat-icon>
+                <span>Create</span>
+              </button>
+              <button mat-raised-button class="btn-solid" (click)="openFilterModal('staff')">
+                <mat-icon>filter_list</mat-icon>
+                <span>Filter</span>
+              </button>
+            </div>
+          </div>
+          <dwlz-datatable [configuration]="staffConf" [dataTransformation]="staffDataTransform"
+            [dataSource]="staffDataSourceFn" (selected)="emitSelectedStaff($event)"></dwlz-datatable>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Communication Preferences">
+      <div class="content">
+        <form [formGroup]="primaryMemberForm" class="container-fluid" novalidate>
+
+          <div class="example-margin">
+            <h5>Communication Method</h5><br/>
+            <div class="row example-margin">
+              <div class="col-md-4">
+                <label class="labelStatus">Email &nbsp;</label>
+                <mat-radio-group formControlName="pm_comm_email">
+                  <mat-radio-button class="radioPadding" value='Y'
+                    [checked]="this.primaryMemberForm.value.pm_isactive=='Y'">Yes
+                  </mat-radio-button>
+                  <mat-radio-button class="radioPadding" color="" value="N"
+                    [checked]="this.primaryMemberForm.value.pm_isactive=='N'">No
+                  </mat-radio-button>
+                </mat-radio-group>
+                ​
+              </div>
+            </div>
+          </div>
+
+          <div class="example-margin">
+          <div class="row example-margin">
+            <div class="col-md-4">
+              <label class="labelStatus">SMS &nbsp;</label>
+              <mat-radio-group formControlName="pm_comm_sms" (change)="radioChange($event.value)">
+                <mat-radio-button class="radioPadding" value='Y'
+                  [checked]="this.primaryMemberForm.value.pm_comm_sms=='Y'">Yes
+                </mat-radio-button>
+                <mat-radio-button class="radioPadding" color="" value="N"
+                  [checked]="this.primaryMemberForm.value.pm_comm_sms=='N'">No
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          </div>
+          <hr>
+
+          <div class="example-margin">
+            <h5>Push Notification</h5><br/>
+            <div class="row example-margin">
+              <div class="col-md-3">
+                <label class="labelStatus">Visitor</label>
+              </div>
+              <mat-checkbox class="example-margin" [checked]="this.primaryMemberForm.value.pm_noti_visitor_self=='Y'">
+                Self
+              </mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="this.primaryMemberForm.value.pm_noti_visitor_spouse=='Y'">
+                Spouse</mat-checkbox>
+            </div>
+
+            <div class="row example-margin">
+              <div class="col-md-3">
+                <label class="labelStatus">Bill Payment Reminders</label>
+              </div>
+              <mat-checkbox class="example-margin" [checked]="this.primaryMemberForm.value.pm_noti_billpay_self=='Y'">
+                Self
+              </mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="this.primaryMemberForm.value.pm_noti_billpay_spouse=='Y'">
+                Spouse</mat-checkbox>
+            </div>
+
+            <div class="row example-margin">
+              <div class="col-md-3">
+                <label class="labelStatus">Staff Arrival</label>
+              </div>
+              <mat-checkbox class="example-margin" [checked]="this.primaryMemberForm.value.pm_noti_staff_self=='Y'">Self
+              </mat-checkbox>
+              <mat-checkbox class="example-margin" [checked]="this.primaryMemberForm.value.pm_noti_staff_spouse=='Y'">
+                Spouse</mat-checkbox>
+            </div>
+
+          </div>
+
+
+          <div class="button-container modal-buttons">
+            <div class="button-left"></div>
+            <div class="button-right">
+              <button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+                <mat-icon>clear</mat-icon>
+                <span>Cancel</span>
+              </button>
+            </div>
+          </div>
+        </form>
+        <!-- {{this.primaryMemberForm.value | json }} -->
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

@@ -1,0 +1,98 @@
+<div>
+  <dwlz-layout>
+    <dwlz-toolbar *ngIf="isLoggedIn">
+      <div>
+        <h3 class="page-heading">
+          <span *ngIf="tabLink && tabLink.displayName">{{ tabLink.displayName  }}</span>
+          <span *ngIf="tabLink && tabLink.displayName == undefined">{{ tabLink  }}</span>
+        </h3>
+        <div class="breadcrumb">
+          <ul>
+            <li *ngFor="let breadcrumb of breadcrumbs; last as isLast" [ngClass]="{ active: isLast }">
+              <div class="breadcrumb-item" *ngIf="breadcrumb.label.breadcrumb">
+                <a *ngIf="!isLast" [routerLink]="breadcrumb.url">{{ breadcrumb.label.breadcrumb }}
+                </a>
+                <span *ngIf="isLast">{{  breadcrumb.label.breadcrumb }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="setting-btn" (click)="toggleSetting()" id="tool">
+        <!-- <button mat-icon-button>
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
+        <div class="toolbar-right" *ngIf="togleSetting">
+          <ul>
+            <li [routerLink]="['master/']" routerLinkActive="router-link-active">Help</li>
+            <li (click)="logOut()">LogOut</li>
+          </ul>
+        </div> -->
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-icon style="color:#291350">help</mat-icon>
+            <span style="color:black">Help</span>
+          </button>
+          <button mat-menu-item (click)="logOut()">
+            <mat-icon style="color:#291350">logout</mat-icon>
+            <span style="color:black">LogOut</span>
+          </button>
+        </mat-menu>
+        
+      </div>
+    </dwlz-toolbar>
+
+    <dwlz-sidenav *ngIf="isLoggedIn">
+      <div class="sidebar-logo-container">
+        <div class="brand-logo">
+          <h1>
+            <img src="assets/images/logo.png" alt="" />
+          </h1>
+        </div>
+        <div class="current-society-container">
+          <h2>{{societyName}} Society</h2>
+        </div>
+      </div>
+      <ul>
+        <li *ngIf="parent" class="parent-nav" (click)="backToParent(parent)">
+          <span>
+            <mat-icon *ngIf="parent.icon">{{parent.icon}}</mat-icon>
+            <!-- <span class="menu-image" *ngIf="parent.icon"><img src="./../assets/images/{{parent.icon}}.svg" alt=""></span> -->
+            <span>{{ parent.displayName }}</span>
+          </span>
+          <span class="nav-arrow">
+              <mat-icon>chevron_left</mat-icon>
+          </span>
+        </li>
+        <li *ngFor="let item of current; index as i" (click)="selectedNavigation(item, i)" [class.indent]="parent" [class.active]="i === active">
+          <span>
+              <mat-icon *ngIf="item.icon">{{item.icon}}</mat-icon>
+            <span>{{ item.displayName }}</span>
+          </span>
+          <span *ngIf="item.children" class="nav-arrow">
+            <mat-icon>chevron_right</mat-icon>
+            <!-- <img src="./../assets/images/right.png" alt="" /> -->
+          </span>
+        </li>
+      </ul>
+    </dwlz-sidenav>
+
+    <dwlz-content [class.login-dwlz-content]="!isLoggedIn">
+        <!-- <dwlz-content> -->
+      <div class="secondary-toolbar">
+
+      </div>
+      <div class="main-content" [class.login-dwlz-content]="!isLoggedIn">
+        <router-outlet></router-outlet>
+      </div>
+    </dwlz-content>
+
+    <dwlz-footer *ngIf="isLoggedIn">
+      © 2019 dwellze Solutions Private Ltd. All rights reserved.
+    </dwlz-footer>
+  </dwlz-layout>
+</div>

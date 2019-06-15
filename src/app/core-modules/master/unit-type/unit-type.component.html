@@ -1,0 +1,128 @@
+<div class="content-wrapper">
+	<div class="content">
+		<mat-card *ngIf="isForm">
+			<mat-card-content>
+				<form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit()">
+					<div class="container-fluid fields-container">
+						<div class="row">
+							<div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Unit Type</mat-label>
+									<input matInput formControlName="ft_type" autocomplete="off" required>
+									<mat-error *ngIf="this.masterFormGroup.get('ft_type').invalid">
+										Please
+										Enter Valid Unit Type like 1 BHK </mat-error>
+								</mat-form-field>
+							</div>
+
+							<div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Number of Unit</mat-label>
+									<input matInput type="text" pattern="^((?!(0))[0-9]{0,4})$"
+										formControlName="ft_numbers" autocomplete="off" required>
+									<mat-error *ngIf="this.masterFormGroup.get('ft_numbers').invalid">
+										Please
+										Enter Valid Number of Unit </mat-error>
+								</mat-form-field>
+							</div>
+
+							<div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Unit Carpet Area (In SqFt)</mat-label>
+									<input matInput type="text" formControlName="ft_sqft"
+										pattern="^((?!(0))[0-9]{3,5})$" autocomplete="off" required>
+									<mat-error *ngIf="this.masterFormGroup.get('ft_sqft').invalid">
+										Please
+										Enter Valid Area like 1200 </mat-error>
+								</mat-form-field>
+							</div>
+
+							<div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Unit Built Up Area (In SqFt)</mat-label>
+									<input matInput type="text" formControlName="ft_builtup"
+										pattern="^((?!(0))[0-9]{3,5})$" autocomplete="off" required>
+									<mat-error *ngIf="this.masterFormGroup.get('ft_builtup').invalid">
+										Please
+										Enter Valid Area like 1200 </mat-error>
+								</mat-form-field>
+							</div>
+
+
+
+							<div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Number Of Bedrooms</mat-label>
+									<input matInput type="text" formControlName="ft_bedrooms"
+										pattern="([0-9]*)" autocomplete="off" required>
+									<mat-error *ngIf="this.masterFormGroup.get('ft_bedrooms').invalid">
+										Please
+										Enter Valid Number </mat-error>
+								</mat-form-field>
+							</div>
+							<div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Number Of Bathrooms</mat-label>
+									<input matInput type="text" formControlName="ft_bathrooms"
+										pattern="^((?!(0))[0-9]{0,1})$" autocomplete="off" required>
+									<mat-error *ngIf="this.masterFormGroup.get('ft_bathrooms').invalid">
+										Please
+										Enter Valid Number </mat-error>
+								</mat-form-field>
+							</div>
+							<div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Number Of Balconies</mat-label>
+									<input matInput type="text" formControlName="ft_balconies"
+										pattern="^([0-9]{1})$" autocomplete="off" required>
+									<mat-error *ngIf="this.masterFormGroup.get('ft_balconies').invalid">
+										Please
+										Enter Valid Number </mat-error>
+								</mat-form-field>
+							</div>
+							<div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Construction Cost</mat-label>
+									<input matInput type="text" formControlName="ft_const_cost"
+										pattern="^\d+(\.\d{1,2})?$" autocomplete="off" required>
+									<mat-error *ngIf="this.masterFormGroup.get('ft_const_cost').invalid">
+										Please
+										Enter Valid Construction Cost </mat-error>
+								</mat-form-field>
+							</div>
+						</div>
+							<!-- <p>{{masterFormGroup.value|json}}</p> -->
+					</div>
+
+					<div class="button-container">
+						<div class="button-left"></div>
+						<div class="button-right">
+							<button mat-raised-button class="btn-solid">
+								<mat-icon>save</mat-icon><span>Save</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+								<mat-icon>delete</mat-icon><span>Delete</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+								<mat-icon>clear</mat-icon><span>Cancel</span>
+							</button>
+						</div>
+					</div>
+				</form>
+			</mat-card-content>
+		</mat-card>
+
+		<dwlz-datatable [configuration]="unitTypeConf"   [dataSource]="dataSourceFn"
+			(selected)="emitSelected($event)" *ngIf="!isForm"></dwlz-datatable>
+
+		<div class="content-header">
+			<div class="content-header-buttons" *ngIf="!isForm">
+				<button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+					<mat-icon>add</mat-icon><span>Create</span>
+				</button>
+				<button mat-flat-button class="btn-solid" type="button" (click)="openFilterModal()">
+					<mat-icon>filter_list</mat-icon><span>Filter</span>
+				</button>
+			</div>
+		</div>
+	</div>

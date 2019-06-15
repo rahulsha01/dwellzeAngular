@@ -1,0 +1,201 @@
+<div class="content-wrapper">
+
+	<div class="content">
+		<mat-card *ngIf="isForm">
+			<mat-card-content>
+				<form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit()">
+					<div class="row">
+						<div class="col-md-6">
+							<mat-form-field class="example-full-width">
+								<mat-label>Name</mat-label>
+								<input matInput type="text" formControlName="ev_name" InitCapital autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('ev_name').invalid"> Please Enter Valid Name
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-6">
+							<mat-form-field class="example-full-width">
+								<textarea matInput placeholder="Description" formControlName="ev_desc"></textarea>
+								<mat-error *ngIf="this.masterFormGroup.get('ev_desc').invalid"> Please Enter Valid Description
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<mat-form-field class="example-full-width">
+								<input matInput [matDatepicker]="picker" (focus)="startDateModal()" placeholder="Start Date" (ngModelChange)="dateChecker($event)"
+								 formControlName="ev_startdate" autocomplete="off">
+								<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+								<mat-datepicker #picker></mat-datepicker>
+
+								<mat-error *ngIf="this.masterFormGroup.get('ev_startdate').invalid"> Please Select Valid Start Date
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-6">
+							<mat-form-field class="example-full-width">
+								<input matInput [matDatepicker]="picker1" (focus)="endDateModal()" placeholder="End Date" (ngModelChange)="endDateChecker($event)"
+								 formControlName="ev_enddate" autocomplete="off">
+								<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+								<mat-datepicker #picker1></mat-datepicker>
+
+								<mat-error *ngIf="this.masterFormGroup.get('ev_enddate').invalid"> Please Select Valid End Date
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<mat-form-field>
+								<mat-label>Start Time</mat-label>
+								<input matInput type="time" formControlName="ev_starttime" autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('ev_starttime').invalid">
+									Please Select Start Time
+								</mat-error>
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-6">
+							<mat-form-field>
+								<mat-label>End Time</mat-label>
+								<input matInput type="time" formControlName="ev_endtime" autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('ev_endtime').invalid"> Please Select Valid End Time
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<div class="row">
+						<!-- <div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Age Require</mat-label>
+									<input matInput type="number" formControlName="ev_minreq" autocomplete="off">
+									<mat-error *ngIf="this.masterFormGroup.get('ev_minreq').invalid">Please
+										Enter Age</mat-error>
+								</mat-form-field>
+							</div> -->
+
+						<!-- <div class="col-md-6">
+								<mat-form-field appearance="standard">
+									<mat-label>Bank Name</mat-label>
+									<input matInput type="text" formControlName="ev_favourof" InitCapital
+										autocomplete="off">
+									<mat-error *ngIf="this.masterFormGroup.get('ev_favourof').invalid">Please
+										Enter </mat-error>
+								</mat-form-field>
+							</div> -->
+					</div>
+
+					<div class="row">
+						<div class="col-md-6" style="display: flex;	align-items: center;">
+							<!-- <mat-form-field>
+									<mat-select placeholder="Paid" formControlName="ev_paid">
+										<mat-option *ngFor="let item of isPaid" [value]="item.value">
+											{{item.value}}
+										</mat-option>
+									</mat-select>
+									<mat-error *ngIf="this.masterFormGroup.get('ev_paid').invalid">Please
+										Select </mat-error>
+								</mat-form-field> -->
+							<label class="labelStatus">Payable &nbsp;*</label>
+							<mat-radio-group formControlName="ev_paid" (change)="radioChange($event.value)">
+								<mat-radio-button class="radioPadding" value='Y' [checked]="this.masterFormGroup.value.ev_paid=='Y'">Yes
+								</mat-radio-button>
+								<mat-radio-button class="radioPadding" color="warn" value="N" [checked]="this.masterFormGroup.value.ev_paid=='N'">No
+								</mat-radio-button>
+							</mat-radio-group>
+						</div>
+						<div class="col-md-6">
+							<mat-form-field appearance="standard">
+								<mat-label>Amount</mat-label>
+								<input matInput type="text" formControlName="ev_amount" class="amountAlign" autocomplete="off">
+								<span matPrefix>₹&nbsp;</span>
+								<span matSuffix>.00</span>
+								<mat-error *ngIf="this.masterFormGroup.get('ev_amount').invalid">Please Enter Valid Amount</mat-error>
+							</mat-form-field>
+						</div>
+
+						<!-- <div class="col-md-6">
+								<mat-form-field>
+									<mat-label>Payment Type</mat-label>
+									<input matInput type="text" formControlName="ev_pymttype" (blur)="onBlur($event)"
+										[matAutocomplete]="auto1" (change)="payTypeValueChangeFn()">
+									<mat-autocomplete #auto1="matAutocomplete" (optionSelected)="onSelectionChanged($event)"
+										[displayWith]="displayPYTFn.bind(this)">
+										<mat-option *ngFor="let option of options" [value]="option.lov_storevalue">
+											{{option.lov_displayvalue}}
+										</mat-option>
+									</mat-autocomplete>
+	
+									<mat-error *ngIf="this.masterFormGroup.get('ev_pymttype').invalid">Please
+										select Payment Type</mat-error>
+								</mat-form-field>
+							</div> -->
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="col-md-6">
+								<div>
+									<label class="labelStatus">Event Image </label><br />
+								</div>
+								<div class="image-placeholder">
+									<div class="new-image" *ngIf="!imageFiles.length"></div>
+									<div class="placeholder-wrapper">
+										<div class="col-sm-3 image-uploaded-wrapper" *ngFor="let image of imageFiles; index as i">
+											<img width="100%" src="{{image.fileSrc}}" alt="" *ngIf="image.fileSrc">
+											<span (click)="removeImage(i)" title="Remove image" *ngIf="image.fileSrc">
+												<mat-icon>highlight_off</mat-icon>
+											</span>
+										</div>
+									</div>
+
+									<input type="file" accept="image/*" multiple="true" (change)="imageUpload($event)">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="button-container">
+						<div class="button-left"></div>
+						<div class="button-right">
+							<button mat-raised-button class="btn-solid">
+								<mat-icon>save</mat-icon><span>Save</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+								<mat-icon>delete</mat-icon><span>Delete</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+								<mat-icon>clear</mat-icon><span>Cancel</span>
+							</button>
+						</div>
+					</div>
+
+
+				</form>
+			</mat-card-content>
+		</mat-card>
+
+		<!-- <mat-form-field style="width: 30%;">
+			<input matInput (keyup)="applySearchFilter($event.target.value)" placeholder="Search Here...">
+		  </mat-form-field> -->
+		  
+		<dwlz-datatable [configuration]="eventConf" [dataSource]="dataSourceFn" (selected)="emitSelected($event)"
+			*ngIf="!isForm" [dataTransformation]="eventDataTransform" ></dwlz-datatable>
+
+		<div class="content-header">
+			<div class="content-header-buttons" *ngIf="!isForm">
+				<button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+					<mat-icon>add</mat-icon><span>Create</span>
+				</button>
+				<button mat-flat-button class="btn-solid" type="button" (click)="openFilterModal(filterDialog)">
+					<mat-icon>filter_list</mat-icon><span>Filter</span>
+				</button>
+			</div>
+		</div>
+	</div>

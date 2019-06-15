@@ -1,0 +1,97 @@
+<div class="modal-form-container full-width-dialog">
+  <h6 class="modal-form-title">Vehicle Details</h6>
+
+  <div class="content">
+    <form [formGroup]="vehicleForm" class="container-fluid" (ngSubmit)="onSubmit()" novalidate>
+      <div class="row">
+        <div class="col-md-3">
+          <label class="labelStatus">Vehicle Type* </label><br />
+          <mat-radio-group class="example-radio-group" formControlName="mv_cat">
+            <mat-radio-button class="example-radio-button" value="2W">2 Wheeler
+              &nbsp;
+            </mat-radio-button>
+            <mat-radio-button class="example-radio-button" value="4W">4 Wheeler
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+            <mat-label>Vehicle Brand</mat-label>
+            <input matInput type="text" formControlName="mv_brand" InitCapital (change)=inputBrandListener()
+              [matAutocomplete]="auto" required>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayVehBrandFn.bind(this)">
+              <mat-option *ngFor="let option of vehicleModel" [value]="option.mv_brand">
+                {{option.mv_brand}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        ​
+        <div class="col-md-3">
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Vehicle Model</mat-label>
+            <input matInput type="text" formControlName="mv_model" autocomplete="off">
+            <mat-error *ngIf="this.vehicleForm.get('mv_model').invalid">
+              Please
+              Enter Valid Model Number </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      ​
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+            <mat-label>Vehicle Number</mat-label>
+            <input matInput type="text" formControlName="mv_no" required autocomplete="off">
+            <mat-error *ngIf="this.vehicleForm.get('mv_no').invalid">
+              Please
+              Enter Valid Vehicle Number </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+            <mat-label>Parking Slot </mat-label>
+            <input matInput type="text" formControlName="mv_parking" required autocomplete="off">
+            <mat-error *ngIf="this.vehicleForm.get('mv_parking').invalid">
+              Please
+              Enter Valid Parking Slot </mat-error>
+          </mat-form-field>
+        </div>​
+
+        <div class="col-md-4">
+          <label class="labelStatus">Status</label>
+          <mat-radio-group formControlName="mv_isactive" (change)="radioChange($event.value)">
+            <mat-radio-button class="radioPadding" value='Y' [checked]="this.vehicleForm.value.mv_isactive=='Y'">Active
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N"
+              [checked]="this.vehicleForm.value.mv_isactive=='N'">Inactive
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+      <div class="button-container modal-buttons">
+        <div class="button-left"></div>
+        <div class="button-right">
+          <button mat-raised-button class="btn-solid">
+            <mat-icon>save</mat-icon>
+            <span>Save</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" (click)="closeForm(true)">
+            <mat-icon>clear</mat-icon>
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+
+    </form>
+    <!-- {{this.vehicleForm.value | json}} -->
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="content-wrapper">
+
+	<div class="content">
+		<mat-card *ngIf="isForm">
+			<mat-card-content>
+				<form [formGroup]="masterFormGroup" (ngSubmit)="onSubmit()">
+					<div class="container-fluid fields-container">
+						<div class="fields-container">
+							<mat-form-field>
+								<mat-label>Type</mat-label>
+								<input matInput type="text" formControlName="hp_lovid" required (blur)="onBlur($event)"
+									(change)="primaryMemChangeFn()" [matAutocomplete]="auto">
+								<mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event)"
+									[displayWith]="displayUnitTypeFn.bind(this)">
+									<mat-option *ngFor="let option of options" [value]="option.lov_storevalue">
+										{{option.lov_displayvalue}}
+									</mat-option>
+								</mat-autocomplete>
+								<!-- <mat-hint><strong>Only Alphabets Allowed</strong></mat-hint> -->
+								<mat-error *ngIf="this.masterFormGroup.get('hp_lovid').invalid">Please Select
+									Valid Type From The List
+								</mat-error>
+							</mat-form-field>
+
+							<mat-form-field appearance="standard">
+								<mat-label>Primary Contact Number</mat-label>
+								<input matInput type="text" formControlName="hp_number1" required MobileNumber
+									autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('hp_number1').invalid"> Please
+									Enter Valid Contact Number (3,10 or 11 digits allowed)
+								</mat-error>
+
+							</mat-form-field>
+
+							<mat-form-field appearance="standard">
+								<mat-label>Secondary Contact Number</mat-label>
+								<input matInput type="text" formControlName="hp_number2" required MobileNumber
+									autocomplete="off">
+								<mat-error *ngIf="this.masterFormGroup.get('hp_number2').invalid"> Please
+									Enter Valid Contact Number (3,10 or 11 digits allowed)
+								</mat-error>
+							</mat-form-field>
+
+							<mat-form-field class="example-full-width">
+								<textarea matInput placeholder="Description" required
+									formControlName="hp_desc"></textarea>
+								<mat-error *ngIf="this.masterFormGroup.get('hp_desc').invalid">Description Required
+								</mat-error>
+							</mat-form-field>
+
+						</div>
+
+					</div>
+
+
+					<div class="button-container">
+						<div class="button-left"></div>
+						<div class="button-right">
+							<button mat-raised-button class="btn-solid">
+								<mat-icon>save</mat-icon><span>Save</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+								<mat-icon>delete</mat-icon><span>Delete</span>
+							</button>
+							<button mat-flat-button class="btn-solid" type="button" (click)="closeForm()">
+								<mat-icon>clear</mat-icon><span>Cancel</span>
+							</button>
+						</div>
+					</div>
+
+
+				</form>
+			</mat-card-content>
+		</mat-card>
+
+		<dwlz-datatable [configuration]="helplineConf" [dataSource]="dataSourceFn" (selected)="emitSelected($event)"
+			*ngIf="!isForm"></dwlz-datatable>
+
+
+		<div class="content-header">
+			<div class="content-header-buttons" *ngIf="!isForm">
+				<button mat-flat-button class="btn-solid" type="button" (click)="openForm()">
+					<mat-icon>add</mat-icon><span>Create</span>
+				</button>
+				<button mat-flat-button class="btn-solid" type="button" (click)="openFilterModal(filterDialog)">
+					<mat-icon>filter_list</mat-icon><span>Filter</span>
+				</button>
+			</div>
+		</div>
+	</div>

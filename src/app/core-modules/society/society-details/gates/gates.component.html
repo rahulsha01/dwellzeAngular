@@ -1,0 +1,63 @@
+<div class="modal-form-container">
+  <h4 class="modal-form-title">Gate Details</h4>
+  <div class="content">
+    <form [formGroup]="gatesForm" class="container-fluid" novalidate (ngSubmit)="onSubmit()">
+
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Gate" type="text" formControlName="sg_name">
+
+            <mat-error *ngIf="this.gatesForm.get('sg_name').invalid">Please
+              Enter Name</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field class="example-full-width">
+            <textarea matInput placeholder="Description" formControlName="sg_desc"></textarea>
+            <mat-error *ngIf="this.gatesForm.get('sg_desc').invalid">Please
+              Enter Description</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <label class="labelStatus">Status</label>
+          <mat-radio-group formControlName="sg_isactive" (change)="gatesForm.patchValue({
+            sw_isactive: $event.value
+          })">
+            <mat-radio-button class="radioPadding" value="Y" [checked]="this.gatesForm.value.sg_isactive=='Y'">
+              Active
+            </mat-radio-button>
+            <mat-radio-button class="radioPadding" color="warn" value="N"
+              [checked]="this.gatesForm.value.sg_isactive=='N'">Inactive
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+
+      <div class="button-container modal-buttons">
+        <div class="button-left"></div>
+        <div class="button-right">
+          <button mat-raised-button class="btn-solid">
+            <mat-icon>save</mat-icon>
+            <span>Save</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" *ngIf="isEdit" (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+          <button mat-flat-button class="btn-solid" type="button" (click)="closeForm(true)">
+            <mat-icon>clear</mat-icon>
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
